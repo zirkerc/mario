@@ -1,8 +1,6 @@
-(function() {
-  if (typeof Mario === 'undefined')
-    window.Mario = {};
 
-  var Sprite = Mario.Sprite = function(img, pos, size, speed, frames, once) {
+class Sprite {
+  constructor(img, pos, size, speed, frames, once) {
     this.pos = pos;
     this.size = size;
     this.speed = speed;
@@ -12,17 +10,17 @@
     this.frames = frames;
   }
 
-  Sprite.prototype.update = function(dt, gameTime) {
+  update(dt, gameTime) {
     if (gameTime && gameTime == this.lastUpdated) return;
-    this._index += this.speed*dt;
+    this._index += this.speed * dt;
     if (gameTime) this.lastUpdated = gameTime;
   }
 
-  Sprite.prototype.setFrame = function(frame) {
+  setFrame(frame) {
     this._index = frame;
   }
 
-  Sprite.prototype.render = function(ctx, posx, posy, vX, vY) {
+  render(ctx, posx, posy, vX, vY) {
     var frame;
 
     if (this.speed > 0) {
@@ -41,7 +39,8 @@
     var x = this.pos[0];
     var y = this.pos[1];
 
-    x += frame*this.size[0];
-    ctx.drawImage(resources.get(this.img), x + (1/3),y + (1/3), this.size[0] - (2/3), this.size[1] - (2/3), Math.round(posx - vX), Math.round(posy - vY), this.size[0],this.size[1]);
+    x += frame * this.size[0];
+    ctx.drawImage(resources.get(this.img), x + (1 / 3), y + (1 / 3), this.size[0] - (2 / 3), this.size[1] - (2 / 3), Math.round(posx - vX), Math.round(posy - vY), this.size[0], this.size[1]);
   }
-})();
+}
+Mario.Sprite = Sprite;

@@ -1,25 +1,22 @@
-(function() {
-  if (typeof Mario === 'undefined')
-  window.Mario = {};
+//TODO: On console the hitbox is smaller. Measure it and edit this.
 
-  //TODO: On console the hitbox is smaller. Measure it and edit this.
-
-  var Goomba = Mario.Goomba = function(pos, sprite) {
-    this.dying = false;
-    Mario.Entity.call(this, {
+class Goomba extends Entity {
+  constructor(pos, sprite) {
+    super({
       pos: pos,
       sprite: sprite,
-      hitbox: [0,0,16,16]
+      hitbox: [0, 0, 16, 16]
     });
+
+    this.dying = false;
     this.vel[0] = -0.5;
     this.idx = level.enemies.length;
-  };
-
-  Goomba.prototype.render = function(ctx, vX, vY) {
+  }
+  render(ctx, vX, vY) {
     this.sprite.render(ctx, this.pos[0], this.pos[1], vX, vY);
   };
 
-  Goomba.prototype.update = function(dt, vX) {
+  update(dt, vX) {
     if (this.pos[0] - vX > 336) { //if we're too far away, do nothing.
       return;
     } else if (this.pos[0] - vX < -32) {
@@ -39,11 +36,11 @@
     this.sprite.update(dt);
   };
 
-  Goomba.prototype.collideWall = function() {
+  collideWall() {
     this.vel[0] = -this.vel[0];
   };
 
-  Goomba.prototype.checkCollisions = function() {
+  checkCollisions() {
     if (this.flipping) {
       return;
     }
@@ -70,10 +67,10 @@
       }
     }
     var that = this;
-    level.enemies.forEach(function(enemy){
+    level.enemies.forEach(function (enemy) {
       if (enemy === that) { //don't check collisions with ourselves.
         return;
-      } else if (enemy.pos[0] - vX > 336){ //stop checking once we get to far away dudes.
+      } else if (enemy.pos[0] - vX > 336) { //stop checking once we get to far away dudes.
         return;
       } else {
         that.isCollideWith(enemy);
@@ -82,7 +79,7 @@
     this.isCollideWith(player);
   };
 
-  Goomba.prototype.isCollideWith = function(ent) {
+  isCollideWith(ent) {
     if (ent instanceof Mario.Player && (this.dying || ent.invincibility)) {
       return;
     }
@@ -92,8 +89,8 @@
     var hpos2 = [ent.pos[0] + ent.hitbox[0], ent.pos[1] + ent.hitbox[1]];
 
     //if the hitboxes actually overlap
-    if (!(hpos1[0] > hpos2[0]+ent.hitbox[2] || (hpos1[0]+this.hitbox[2] < hpos2[0]))) {
-      if (!(hpos1[1] > hpos2[1]+ent.hitbox[3] || (hpos1[1]+this.hitbox[3] < hpos2[1]))) {
+    if (!(hpos1[0] > hpos2[0] + ent.hitbox[2] || (hpos1[0] + this.hitbox[2] < hpos2[0]))) {
+      if (!(hpos1[1] > hpos2[1] + ent.hitbox[3] || (hpos1[1] + this.hitbox[3] < hpos2[1]))) {
         if (ent instanceof Mario.Player) { //if we hit the player
           if (ent.vel[1] > 0) { //then the goomba dies
             this.stomp();
@@ -109,7 +106,7 @@
     }
   };
 
-  Goomba.prototype.stomp = function() {
+  stomp() {
     sounds.stomp.play();
     player.bounce = true;
     this.sprite.pos[0] = 32;
@@ -118,7 +115,7 @@
     this.dying = 10;
   };
 
-  Goomba.prototype.bump = function() {
+  bump() {
     sounds.kick.play();
     this.sprite.img = 'sprites/enemyr.png';
     this.flipping = true;
@@ -126,4 +123,5 @@
     this.vel[0] = 0;
     this.vel[1] = -2.5;
   };
-})();
+}
+Mario.Goomba = Goomba;

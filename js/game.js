@@ -1,10 +1,10 @@
-var requestAnimFrame = (function(){
-  return window.requestAnimationFrame       ||
+var requestAnimFrame = (function () {
+  return window.requestAnimationFrame ||
     window.webkitRequestAnimationFrame ||
-    window.mozRequestAnimationFrame    ||
-    window.oRequestAnimationFrame      ||
-    window.msRequestAnimationFrame     ||
-    function(callback){
+    window.mozRequestAnimationFrame ||
+    window.oRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    function (callback) {
       window.setTimeout(callback, 1000 / 60);
     };
 })();
@@ -14,7 +14,7 @@ var canvas = document.createElement("canvas");
 var ctx = canvas.getContext('2d');
 var updateables = [];
 var fireballs = [];
-var player = new Mario.Player([0,0]);
+var player = new Mario.Player([0, 0]);
 
 //we might have to get the size and calculate the scaling
 //but this method should let us make it however big.
@@ -23,14 +23,14 @@ var player = new Mario.Player([0,0]);
 //TODO: fiddling with scaled sprites looks BETTER, but not perfect. Hmm.
 canvas.width = 762;
 canvas.height = 720;
-ctx.scale(3,3);
+ctx.scale(3, 3);
 document.body.appendChild(canvas);
 
 //viewport
 var vX = 0,
-    vY = 0,
-    vWidth = 256,
-    vHeight = 240;
+  vY = 0,
+  vWidth = 256,
+  vHeight = 240;
 
 //load our images
 resources.load([
@@ -99,9 +99,10 @@ function update(dt) {
 }
 
 function handleInput(dt) {
+  input.update();
   if (player.piping || player.dying || player.noInput) return; //don't accept input
 
-  if (input.isDown('RUN')){
+  if (input.isDown('RUN')) {
     player.run();
   } else {
     player.noRun();
@@ -132,7 +133,7 @@ function handleInput(dt) {
 //update all the moving stuff
 function updateEntities(dt, gameTime) {
   player.update(dt, vX);
-  updateables.forEach (function(ent) {
+  updateables.forEach(function (ent) {
     ent.update(dt, gameTime);
   });
 
@@ -140,23 +141,23 @@ function updateEntities(dt, gameTime) {
   if (player.exiting) {
     if (player.pos[0] > vX + 96)
       vX = player.pos[0] - 96
-  }else if (level.scrolling && player.pos[0] > vX + 80) {
+  } else if (level.scrolling && player.pos[0] > vX + 80) {
     vX = player.pos[0] - 80;
   }
 
   if (player.powering.length !== 0 || player.dying) { return; }
-  level.items.forEach (function(ent) {
+  level.items.forEach(function (ent) {
     ent.update(dt);
   });
 
-  level.enemies.forEach (function(ent) {
+  level.enemies.forEach(function (ent) {
     ent.update(dt, vX);
   });
 
-  fireballs.forEach(function(fireball) {
+  fireballs.forEach(function (fireball) {
     fireball.update(dt);
   });
-  level.pipes.forEach (function(pipe) {
+  level.pipes.forEach(function (pipe) {
     pipe.update(dt);
   });
 }
@@ -167,16 +168,16 @@ function checkCollisions() {
   player.checkCollisions();
 
   //Apparently for each will just skip indices where things were deleted.
-  level.items.forEach(function(item) {
+  level.items.forEach(function (item) {
     item.checkCollisions();
   });
-  level.enemies.forEach (function(ent) {
+  level.enemies.forEach(function (ent) {
     ent.checkCollisions();
   });
-  fireballs.forEach(function(fireball){
+  fireballs.forEach(function (fireball) {
     fireball.checkCollisions();
   });
-  level.pipes.forEach (function(pipe) {
+  level.pipes.forEach(function (pipe) {
     pipe.checkCollisions();
   });
 }
@@ -189,8 +190,8 @@ function render() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   //scenery gets drawn first to get layering right.
-  for(var i = 0; i < 15; i++) {
-    for (var j = Math.floor(vX / 16) - 1; j < Math.floor(vX / 16) + 20; j++){
+  for (var i = 0; i < 15; i++) {
+    for (var j = Math.floor(vX / 16) - 1; j < Math.floor(vX / 16) + 20; j++) {
       if (level.scenery[i][j]) {
         renderEntity(level.scenery[i][j]);
       }
@@ -198,23 +199,23 @@ function render() {
   }
 
   //then items
-  level.items.forEach (function (item) {
+  level.items.forEach(function (item) {
     renderEntity(item);
   });
 
-  level.enemies.forEach (function(enemy) {
+  level.enemies.forEach(function (enemy) {
     renderEntity(enemy);
   });
 
 
 
-  fireballs.forEach(function(fireball) {
+  fireballs.forEach(function (fireball) {
     renderEntity(fireball);
   })
 
   //then we draw every static object.
-  for(var i = 0; i < 15; i++) {
-    for (var j = Math.floor(vX / 16) - 1; j < Math.floor(vX / 16) + 20; j++){
+  for (var i = 0; i < 15; i++) {
+    for (var j = Math.floor(vX / 16) - 1; j < Math.floor(vX / 16) + 20; j++) {
       if (level.statics[i][j]) {
         renderEntity(level.statics[i][j]);
       }
@@ -231,7 +232,7 @@ function render() {
   }
 
   //Mario goes INTO pipes, so naturally they go after.
-  level.pipes.forEach (function(pipe) {
+  level.pipes.forEach(function (pipe) {
     renderEntity(pipe);
   });
 }

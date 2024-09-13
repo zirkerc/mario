@@ -1,22 +1,26 @@
-(function() {
-	if (typeof Mario === 'undefined')
-		window.Mario = {};
 
-	var Entity = Mario.Entity = function(options) {
-	  this.vel = [0,0];
-	  this.acc = [0,0];
-		this.standing = true;
-	  this.pos = options.pos;
-	  this.sprite = options.sprite;
-	  this.hitbox = options.hitbox;
-	  this.left = false;
+class Entity {
+
+	// Helper function to work with .call
+	static call(self, ...args) {
+		Object.assign(self, new Entity(...args));
 	}
 
-	Entity.prototype.render = function(ctx, vX, vY) {
+	constructor(options) {
+		this.vel = [0, 0];
+		this.acc = [0, 0];
+		this.standing = true;
+		this.pos = options.pos;
+		this.sprite = options.sprite;
+		this.hitbox = options.hitbox;
+		this.left = false;
+	}
+
+	render(ctx, vX, vY) {
 		this.sprite.render(ctx, this.pos[0], this.pos[1], vX, vY)
 	}
 
-	Entity.prototype.collideWall = function(wall) {
+	collideWall(wall) {
 		//the wall will always be a 16x16 block with hitbox = [0,0,16,16].
 		if (this.pos[0] > wall.pos[0]) {
 			//from the right
@@ -30,5 +34,7 @@
 		}
 	}
 
-	Entity.prototype.bump = function() {;}
-})();
+	bump() { ; }
+}
+Mario.Entity = Entity;
+
