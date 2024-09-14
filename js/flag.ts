@@ -8,7 +8,7 @@ class Flag {
   constructor(pos: number) {
     //afaik flags always have the same height and Y-position
     this.pos = new Point(pos, 49);
-    this.hitbox = [0, 0, 0, 0];
+    this.hitbox = new BoundBox(0, 0, 0, 0);
     this.vel = new Point(0, 0);
     this.acc = new Point(0, 0);
   }

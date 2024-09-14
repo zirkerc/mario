@@ -14,7 +14,7 @@ class Koopa extends Entity {
     super({
       pos: pos,
       sprite: sprite,
-      hitbox: [2, 8, 12, 24]
+      hitbox: new BoundBox(2, 8, 12, 24)
     });
 
     this.dying = 0;
@@ -67,7 +67,7 @@ class Koopa extends Entity {
         }
         if (this.shell == 0) {
           this.sprite = level.koopaSprite();
-          this.hitbox = [2, 8, 12, 24]
+          this.hitbox = new BoundBox(2, 8, 12, 24)
           if (this.left) {
             this.sprite.img = 'sprites/enemyr.png';
             this.vel.x = 0.5;
@@ -145,12 +145,12 @@ class Koopa extends Entity {
     }
 
     //the first two elements of the hitbox array are an offset, so let's do this now.
-    var hpos1 = [this.pos.x + this.hitbox[0], this.pos.y + this.hitbox[1]];
-    var hpos2 = [ent.pos.x + ent.hitbox[0], ent.pos.y + ent.hitbox[1]];
+    var hpos1 = [this.pos.x + this.hitbox.x, this.pos.y + this.hitbox.y];
+    var hpos2 = [ent.pos.x + ent.hitbox.x, ent.pos.y + ent.hitbox.y];
 
     //if the hitboxes actually overlap
-    if (!(hpos1[0] > hpos2[0] + ent.hitbox[2] || (hpos1[0] + this.hitbox[2] < hpos2[0]))) {
-      if (!(hpos1[1] > hpos2[1] + ent.hitbox[3] || (hpos1[1] + this.hitbox[3] < hpos2[1]))) {
+    if (!(hpos1[0] > hpos2[0] + ent.hitbox.width || (hpos1[0] + this.hitbox.width < hpos2[0]))) {
+      if (!(hpos1[1] > hpos2[1] + ent.hitbox.height || (hpos1[1] + this.hitbox.height < hpos2[1]))) {
         if (ent instanceof Mario.Player) {
           if (ent.vel.y > 0) {
             player.bounce = true;
@@ -194,7 +194,7 @@ class Koopa extends Entity {
       this.sprite.pos.x += 64;
       this.sprite.pos.y += 16;
       this.sprite.size = [16, 16];
-      this.hitbox = [2, 0, 12, 16];
+      this.hitbox = new BoundBox(2, 0, 12, 16);
       this.sprite.speed = 0;
       this.frames = [0, 1];
       this.vel = new Point(0, 0);
@@ -209,7 +209,7 @@ class Koopa extends Entity {
     this.flipping = true;
     this.sprite.pos = new Point(160, 0);
     this.sprite.size = [16, 16];
-    this.hitbox = [2, 0, 12, 16];
+    this.hitbox = new BoundBox(2, 0, 12, 16);
     this.sprite.speed = 0;
     this.vel.x = 0;
     this.vel.y = -2.5;

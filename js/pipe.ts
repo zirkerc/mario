@@ -17,11 +17,11 @@ class Pipe {
     this.length = options.length;
 
     if (this.direction === "UP" || this.direction === "DOWN") {
-      this.hitbox = [0, 0, 32, this.length * 16];
+      this.hitbox = new BoundBox(0, 0, 32, this.length * 16);
       this.midsection = level.pipeUpMid;
       this.endsection = level.pipeTop;
     } else {
-      this.hitbox = [0, 0, 16 * this.length, 32];
+      this.hitbox = new BoundBox(0, 0, 16 * this.length, 32);
       this.midsection = level.pipeSideMid;
       this.endsection = level.pipeLeft;
     }
@@ -87,26 +87,26 @@ class Pipe {
 
 
     //the first two elements of the hitbox array are an offset, so let's do this now.
-    var hpos1 = [Math.floor(this.pos.x + this.hitbox[0]), Math.floor(this.pos.y + this.hitbox[1])];
-    var hpos2 = [Math.floor(ent.pos.x + ent.hitbox[0]), Math.floor(ent.pos.y + ent.hitbox[1])];
+    var hpos1 = [Math.floor(this.pos.x + this.hitbox.x), Math.floor(this.pos.y + this.hitbox.y)];
+    var hpos2 = [Math.floor(ent.pos.x + ent.hitbox.x), Math.floor(ent.pos.y + ent.hitbox.y)];
 
     //if the hitboxes actually overlap
-    if (!(hpos1[0] > hpos2[0] + ent.hitbox[2] || (hpos1[0] + this.hitbox[2] < hpos2[0]))) {
-      if (!(hpos1[1] > hpos2[1] + ent.hitbox[3] || (hpos1[1] + this.hitbox[3] < hpos2[1]))) {
+    if (!(hpos1[0] > hpos2[0] + ent.hitbox.width || (hpos1[0] + this.hitbox.width < hpos2[0]))) {
+      if (!(hpos1[1] > hpos2[1] + ent.hitbox.height || (hpos1[1] + this.hitbox.height < hpos2[1]))) {
         //if the entity is over the block, it's basically floor
-        var center = hpos2[0] + ent.hitbox[2] / 2;
-        if (Math.abs(hpos2[1] + ent.hitbox[3] - hpos1[1]) <= ent.vel.y) {
+        var center = hpos2[0] + ent.hitbox.width / 2;
+        if (Math.abs(hpos2[1] + ent.hitbox.height - hpos1[1]) <= ent.vel.y) {
           ent.vel.y = 0;
-          ent.pos.y = hpos1[1] - ent.hitbox[3] - ent.hitbox[1];
+          ent.pos.y = hpos1[1] - ent.hitbox.height - ent.hitbox.y;
           ent.standing = true;
           if (ent instanceof Mario.Player) {
             ent.jumping = 0;
           }
-        } else if (Math.abs(hpos2[1] - hpos1[1] - this.hitbox[3]) > ent.vel.y &&
-          center + 2 >= hpos1[0] && center - 2 <= hpos1[0] + this.hitbox[2]) {
+        } else if (Math.abs(hpos2[1] - hpos1[1] - this.hitbox.height) > ent.vel.y &&
+          center + 2 >= hpos1[0] && center - 2 <= hpos1[0] + this.hitbox.width) {
           //ent is under the block.
           ent.vel.y = 0;
-          ent.pos.y = hpos1[1] + this.hitbox[3];
+          ent.pos.y = hpos1[1] + this.hitbox.height;
           if (ent instanceof Mario.Player) {
             ent.jumping = 0;
           }

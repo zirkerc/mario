@@ -7,7 +7,7 @@ class Bcoin extends Entity {
     super({
       pos: pos,
       sprite: level.bcoinSprite(),
-      hitbox: [0, 0, 16, 16]
+      hitbox: new BoundBox(0, 0, 16, 16)
     });
   }
   //I'm not sure whether it makes sense to use an array for vel and acc here

@@ -7,7 +7,7 @@ class Star extends Entity {
     super({
       pos: pos,
       sprite: level.starSprite,
-      hitbox: [0, 0, 16, 16]
+      hitbox: new BoundBox(0, 0, 16, 16)
     });
     this.spawning = 0;
     this.waiting = 0;
@@ -97,12 +97,12 @@ class Star extends Entity {
   //we have access to player everywhere, so let's just do this.
   isPlayerCollided() {
     //the first two elements of the hitbox array are an offset, so let's do this now.
-    var hpos1 = [this.pos.x + this.hitbox[0], this.pos.y + this.hitbox[1]];
-    var hpos2 = [player.pos.x + player.hitbox[0], player.pos.y + player.hitbox[1]];
+    var hpos1 = [this.pos.x + this.hitbox.x, this.pos.y + this.hitbox.y];
+    var hpos2 = [player.pos.x + player.hitbox.x, player.pos.y + player.hitbox.y];
 
     //if the hitboxes actually overlap
-    if (!(hpos1[0] > hpos2[0] + player.hitbox[2] || (hpos1[0] + this.hitbox[2] < hpos2[0]))) {
-      if (!(hpos1[1] > hpos2[1] + player.hitbox[3] || (hpos1[1] + this.hitbox[3] < hpos2[1]))) {
+    if (!(hpos1[0] > hpos2[0] + player.hitbox.width || (hpos1[0] + this.hitbox.width < hpos2[0]))) {
+      if (!(hpos1[1] > hpos2[1] + player.hitbox.height || (hpos1[1] + this.hitbox.height < hpos2[1]))) {
         player.star(this.idx);
       }
     }

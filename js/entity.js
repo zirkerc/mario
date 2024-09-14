@@ -28,12 +28,12 @@ class Entity {
         //the wall will always be a 16x16 block with hitbox = [0,0,16,16].
         if (this.pos.x > wall.pos.x) {
             //from the right
-            this.pos.x = wall.pos.x + wall.hitbox[2] - this.hitbox[0];
+            this.pos.x = wall.pos.x + wall.hitbox.width - this.hitbox.x;
             this.vel.x = Math.max(0, this.vel.x);
             this.acc.x = Math.max(0, this.acc.x);
         }
         else {
-            this.pos.x = wall.pos.x + wall.hitbox[0] - this.hitbox[2] - this.hitbox[0];
+            this.pos.x = wall.pos.x + wall.hitbox.x - this.hitbox.width - this.hitbox.x;
             this.vel.x = Math.min(0, this.vel.x);
             this.acc.x = Math.min(0, this.acc.x);
         }

@@ -30,7 +30,7 @@ class Player extends Entity {
 		super({
 			pos: pos,
 			sprite: new Mario.Sprite('sprites/player.png', new Point(80, 32), [16, 16], 0),
-			hitbox: [0, 0, 16, 16]
+			hitbox: new BoundBox(0, 0, 16, 16)
 		});
 
 		//I know, I know, there are a lot of variables tracking Mario's state.
@@ -367,7 +367,7 @@ class Player extends Entity {
 			this.powerSizes = [[16, 16], [16, 16], [16, 32], [16, 32], [16, 32]];
 			this.shift = [0, 16, -16, 0, -16];
 			this.power = 1;
-			this.hitbox = [0, 0, 16, 32];
+			this.hitbox = new BoundBox(0, 0, 16, 32);
 		} else if (this.power == 1) {
 			var curx = this.sprite.pos.x;
 			this.powerSprites = [new Point(curx, 96), new Point(curx, level.invincibility[0]),
@@ -395,7 +395,7 @@ class Player extends Entity {
 			this.powerSizes = [[16, 32], [16, 16], [16, 32], [16, 16]];
 			this.invincibility = 120;
 			this.power = 0;
-			this.hitbox = [0, 0, 16, 16];
+			this.hitbox = new BoundBox(0, 0, 16, 16);
 		}
 	};
 
@@ -445,11 +445,11 @@ class Player extends Entity {
 				break;
 			case "DOWN":
 				this.vel = new Point(0, 1);
-				this.targetPos = new Point(Math.round(this.pos.x), Math.round(this.pos.y + this.hitbox[3]));
+				this.targetPos = new Point(Math.round(this.pos.x), Math.round(this.pos.y + this.hitbox.height));
 				break;
 			case "UP":
 				this.vel = new Point(0, -1);
-				this.targetPos = new Point(Math.round(this.pos.x), Math.round(this.pos.y - this.hitbox[3]));
+				this.targetPos = new Point(Math.round(this.pos.x), Math.round(this.pos.y - this.hitbox.height));
 				break;
 		}
 	}

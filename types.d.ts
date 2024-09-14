@@ -65,7 +65,7 @@ declare class Resources {
 // }
 
 // declare type Point = { x: number; y: number };
-declare type BoundBox = number[];
+//declare type BoundBox = number[];
 declare interface Wall {
 	hitbox: BoundBox;
 	pos: Point;

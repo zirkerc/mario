@@ -5,7 +5,7 @@ class Fireball extends Entity {
     super({
       pos: pos,
       sprite: new Mario.Sprite('sprites/items.png', new Point(96, 144), [8, 8], 5, [0, 1, 2, 3]),
-      hitbox: [0, 0, 8, 8]
+      hitbox: new BoundBox(0, 0, 8, 8)
     });
     this.hit = 0;
     this.standing = false;
@@ -105,12 +105,12 @@ class Fireball extends Entity {
 
   isCollideWith(ent: Entity) {
     //the first two elements of the hitbox array are an offset, so let's do this now.
-    var hpos1 = [this.pos.x + this.hitbox[0], this.pos.y + this.hitbox[1]];
-    var hpos2 = [ent.pos.x + ent.hitbox[0], ent.pos.y + ent.hitbox[1]];
+    var hpos1 = [this.pos.x + this.hitbox.x, this.pos.y + this.hitbox.y];
+    var hpos2 = [ent.pos.x + ent.hitbox.x, ent.pos.y + ent.hitbox.y];
 
     //if the hitboxes actually overlap
-    if (!(hpos1[0] > hpos2[0] + ent.hitbox[2] || (hpos1[0] + this.hitbox[2] < hpos2[0]))) {
-      if (!(hpos1[1] > hpos2[1] + ent.hitbox[3] || (hpos1[1] + this.hitbox[3] < hpos2[1]))) {
+    if (!(hpos1[0] > hpos2[0] + ent.hitbox.width || (hpos1[0] + this.hitbox.width < hpos2[0]))) {
+      if (!(hpos1[1] > hpos2[1] + ent.hitbox.height || (hpos1[1] + this.hitbox.height < hpos2[1]))) {
         this.hit = 1;
         ent.bump();
       }
