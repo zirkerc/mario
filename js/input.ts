@@ -1,50 +1,75 @@
+interface Input {
+    update();
+    isDown(key: string);
+    reset();
+}
+
+interface GamepadAPI {
+    turbo: boolean;
+    controllerIndex: number;
+    controller?: Gamepad;
+    axesStatus: number[];
+    buttonsCache: string[];
+    buttonsStatus: string[];
+    buttons: Record<number, string>;
+    connect(evt: { gamepad: Gamepad });
+    disconnect();
+    update();
+    buttonPressed(key: string, hold: boolean);
+
+}
 (function () {
     var pressedKeys = {};
     var pressedButtons = {};
+
     function setKey(event, status) {
         var code = event.keyCode;
         var key;
         switch (code) {
             case 65: // A
             case 37: // LeftArrow
-                key = 'LEFT';
-                break;
+                key = 'LEFT'; break;
+
             case 87: // W
-            case 38: // UpArrow
-                key = 'UP';
-                break;
+            case 38:// UpArrow
+                key = 'UP'; break;
+
             case 68: // D
             case 39: // RightArrow
-                key = 'RIGHT';
-                break;
+                key = 'RIGHT'; break;
+
             case 83: // S
             case 40: // DownArrow
-                key = 'DOWN';
-                break;
+                key = 'DOWN'; break;
+
             case 32: // Space
             //key = 'SPACE'; break;
             case 88: // X
-                key = 'JUMP';
-                break;
+                key = 'JUMP'; break;
+
             case 16: // LeftShift
             case 90: // Z
-                key = 'RUN';
-                break;
+                key = 'RUN'; break;
             default:
                 key = String.fromCharCode(code);
         }
+
         pressedKeys[key] = status;
     }
+
     document.addEventListener('keydown', function (e) {
         setKey(e, true);
     });
+
     document.addEventListener('keyup', function (e) {
         setKey(e, false);
     });
+
     window.addEventListener('blur', function () {
         pressedKeys = {};
         pressedButtons = {};
     });
+
     window["input"] = {
         isDown: function (key) {
             //console.log(key, pressedKeys[key.toUpperCase()], pressedButtons[key.toUpperCase()], pressedKeys[key.toUpperCase()] || pressedButtons[key.toUpperCase()])
@@ -59,25 +84,30 @@
         },
         update: function () {
             gamepadAPI.update();
+
             if (gamepadAPI.controller) {
                 pressedButtons['RUN'] = gamepadAPI.buttonPressed("X", true) || gamepadAPI.buttonPressed("LeftTrigger", true);
                 pressedButtons['JUMP'] = gamepadAPI.buttonPressed("A", true);
+
                 pressedButtons['LEFT'] = gamepadAPI.buttonPressed("DPad-Left", true) || gamepadAPI.axesStatus[0] < -0.5;
                 pressedButtons['RIGHT'] = gamepadAPI.buttonPressed("DPad-Right", true) || gamepadAPI.axesStatus[0] > 0.5;
                 pressedButtons['DOWN'] = gamepadAPI.buttonPressed("DPad-Down", true) || gamepadAPI.axesStatus[1] > 0.5;
                 pressedButtons['UP'] = gamepadAPI.buttonPressed("DPad-Up", true) || gamepadAPI.axesStatus[1] < -0.5;
             }
         }
+
     };
-    const gamepadAPI = {
+
+    const gamepadAPI: GamepadAPI = {
         controllerIndex: -1,
         turbo: false,
-        connect(evt) {
+        connect(evt: { gamepad: Gamepad }) {
             gamepadAPI.controllerIndex = evt.gamepad.index;
             gamepadAPI.turbo = true;
             console.log('Gamepad connected.');
         },
         disconnect() {
+
             gamepadAPI.turbo = false;
             //delete gamepadAPI.controller;
             gamepadAPI.controllerIndex = -1;
@@ -90,14 +120,18 @@
             gamepadAPI.controller = navigator.getGamepads()[gamepadAPI.controllerIndex];
             // Clear the buttons cache
             gamepadAPI.buttonsCache = [];
+
             // Move the buttons status from the previous frame to the cache
             for (let k = 0; k < gamepadAPI.buttonsStatus.length; k++) {
                 gamepadAPI.buttonsCache[k] = gamepadAPI.buttonsStatus[k];
             }
+
             // Clear the buttons status
             gamepadAPI.buttonsStatus = [];
+
             // Get the gamepad object
             const c = gamepadAPI.controller;
+
             // Loop through buttons and push the pressed ones to the array
             const pressed = [];
             const btns = [];
@@ -110,6 +144,7 @@
                     }
                 }
             }
+
             // Loop through axes and push their values to the array
             const axes = [];
             if (c.axes) {
@@ -117,21 +152,25 @@
                     axes.push(c.axes[a]);
                 }
             }
+
             // Assign received values
             gamepadAPI.axesStatus = axes;
             gamepadAPI.buttonsStatus = pressed;
+
             // Return buttons for debugging purposes
             //pressed.length && console.log(pressed, axes)
             return pressed;
         },
         buttonPressed(button, hold) {
             let newPress = false;
+
             // Loop through pressed buttons
             for (let i = 0; i < gamepadAPI.buttonsStatus.length; i++) {
                 // If we found the button we're looking for
                 if (gamepadAPI.buttonsStatus[i] === button) {
                     // Set the boolean variable to true
                     newPress = true;
+
                     // If we want to check the single press
                     if (!hold) {
                         // Loop through the cached states from the previous frame
@@ -168,5 +207,6 @@
     };
     window.addEventListener("gamepadconnected", gamepadAPI.connect);
     window.addEventListener("gamepaddisconnected", gamepadAPI.disconnect);
+
     window["gamepadAPI"] = gamepadAPI;
 })();

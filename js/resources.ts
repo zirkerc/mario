@@ -3,6 +3,7 @@
     var resourceCache = {};
     var loading = [];
     var readyCallbacks = [];
+
     // Load an image url or an array of image urls
     function load(urlOrArr) {
         if (urlOrArr instanceof Array) {
@@ -14,6 +15,7 @@
             _load(urlOrArr);
         }
     }
+
     function _load(url) {
         if (resourceCache[url]) {
             return resourceCache[url];
@@ -22,6 +24,7 @@
             var img = new Image();
             img.onload = function () {
                 resourceCache[url] = img;
+
                 if (isReady()) {
                     readyCallbacks.forEach(function (func) { func(); });
                 }
@@ -30,9 +33,11 @@
             img.src = url;
         }
     }
+
     function get(url) {
         return resourceCache[url];
     }
+
     function isReady() {
         var ready = true;
         for (var k in resourceCache) {
@@ -43,9 +48,11 @@
         }
         return ready;
     }
+
     function onReady(func) {
         readyCallbacks.push(func);
     }
+
     window["resources"] = {
         load: load,
         get: get,
