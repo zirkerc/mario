@@ -9,59 +9,59 @@ var oneone = Mario.oneone = function () {
         scrolling: true,
         invincibility: [144, 192, 240],
         exit: 204,
-        floorSprite: new Mario.Sprite('sprites/tiles.png', new Point(0, 0), [16, 16], 0),
-        cloudSprite: new Mario.Sprite('sprites/tiles.png', new Point(0, 320), [48, 32], 0),
-        wallSprite: new Mario.Sprite('sprites/tiles.png', new Point(0, 16), [16, 16], 0),
-        brickSprite: new Mario.Sprite('sprites/tiles.png', new Point(16, 0), [16, 16], 0),
-        brickBounceSprite: new Mario.Sprite('sprites/tiles.png', new Point(32, 0), [16, 16], 0),
+        floorSprite: new Mario.Sprite('sprites/tiles.png', new Point(0, 0), new Size(16, 16), 0),
+        cloudSprite: new Mario.Sprite('sprites/tiles.png', new Point(0, 320), new Size(48, 32), 0),
+        wallSprite: new Mario.Sprite('sprites/tiles.png', new Point(0, 16), new Size(16, 16), 0),
+        brickSprite: new Mario.Sprite('sprites/tiles.png', new Point(16, 0), new Size(16, 16), 0),
+        brickBounceSprite: new Mario.Sprite('sprites/tiles.png', new Point(32, 0), new Size(16, 16), 0),
         rubbleSprite: function () {
-            return new Mario.Sprite('sprites/items.png', new Point(64, 0), [8, 8], 3, [0, 1]);
+            return new Mario.Sprite('sprites/items.png', new Point(64, 0), new Size(8, 8), 3, [0, 1]);
         },
-        ublockSprite: new Mario.Sprite('sprites/tiles.png', new Point(48, 0), [16, 16], 0),
-        superShroomSprite: new Mario.Sprite('sprites/items.png', new Point(0, 0), [16, 16], 0),
-        fireFlowerSprite: new Mario.Sprite('sprites/items.png', new Point(0, 32), [16, 16], 20, [0, 1, 2, 3]),
-        starSprite: new Mario.Sprite('sprites/items.png', new Point(0, 48), [16, 16], 20, [0, 1, 2, 3]),
-        pipeLEndSprite: new Mario.Sprite('sprites/tiles.png', new Point(0, 128), [16, 16], 0),
-        pipeREndSprite: new Mario.Sprite('sprites/tiles.png', new Point(16, 128), [16, 16], 0),
-        pipeLMidSprite: new Mario.Sprite('sprites/tiles.png', new Point(0, 144), [16, 16], 0),
-        pipeRMidSprite: new Mario.Sprite('sprites/tiles.png', new Point(16, 144), [16, 16], 0),
-        pipeUpMid: new Mario.Sprite('sprites/tiles.png', new Point(0, 144), [32, 16], 0),
-        pipeSideMid: new Mario.Sprite('sprites/tiles.png', new Point(48, 128), [16, 32], 0),
-        pipeLeft: new Mario.Sprite('sprites/tiles.png', new Point(32, 128), [16, 32], 0),
-        pipeTop: new Mario.Sprite('sprites/tiles.png', new Point(0, 128), [32, 16], 0),
-        qblockSprite: new Mario.Sprite('sprites/tiles.png', new Point(384, 0), [16, 16], 8, [0, 0, 0, 0, 1, 2, 1]),
+        ublockSprite: new Mario.Sprite('sprites/tiles.png', new Point(48, 0), new Size(16, 16), 0),
+        superShroomSprite: new Mario.Sprite('sprites/items.png', new Point(0, 0), new Size(16, 16), 0),
+        fireFlowerSprite: new Mario.Sprite('sprites/items.png', new Point(0, 32), new Size(16, 16), 20, [0, 1, 2, 3]),
+        starSprite: new Mario.Sprite('sprites/items.png', new Point(0, 48), new Size(16, 16), 20, [0, 1, 2, 3]),
+        pipeLEndSprite: new Mario.Sprite('sprites/tiles.png', new Point(0, 128), new Size(16, 16), 0),
+        pipeREndSprite: new Mario.Sprite('sprites/tiles.png', new Point(16, 128), new Size(16, 16), 0),
+        pipeLMidSprite: new Mario.Sprite('sprites/tiles.png', new Point(0, 144), new Size(16, 16), 0),
+        pipeRMidSprite: new Mario.Sprite('sprites/tiles.png', new Point(16, 144), new Size(16, 16), 0),
+        pipeUpMid: new Mario.Sprite('sprites/tiles.png', new Point(0, 144), new Size(32, 16), 0),
+        pipeSideMid: new Mario.Sprite('sprites/tiles.png', new Point(48, 128), new Size(16, 32), 0),
+        pipeLeft: new Mario.Sprite('sprites/tiles.png', new Point(32, 128), new Size(16, 32), 0),
+        pipeTop: new Mario.Sprite('sprites/tiles.png', new Point(0, 128), new Size(32, 16), 0),
+        qblockSprite: new Mario.Sprite('sprites/tiles.png', new Point(384, 0), new Size(16, 16), 8, [0, 0, 0, 0, 1, 2, 1]),
         bcoinSprite: function () {
-            return new Mario.Sprite('sprites/items.png', new Point(0, 112), [16, 16], 20, [0, 1, 2, 3]);
+            return new Mario.Sprite('sprites/items.png', new Point(0, 112), new Size(16, 16), 20, [0, 1, 2, 3]);
         },
         cloudSprites: [
-            new Mario.Sprite('sprites/tiles.png', new Point(0, 320), [16, 32], 0),
-            new Mario.Sprite('sprites/tiles.png', new Point(16, 320), [16, 32], 0),
-            new Mario.Sprite('sprites/tiles.png', new Point(32, 320), [16, 32], 0)
+            new Mario.Sprite('sprites/tiles.png', new Point(0, 320), new Size(16, 32), 0),
+            new Mario.Sprite('sprites/tiles.png', new Point(16, 320), new Size(16, 32), 0),
+            new Mario.Sprite('sprites/tiles.png', new Point(32, 320), new Size(16, 32), 0)
         ],
         hillSprites: [
-            new Mario.Sprite('sprites/tiles.png', new Point(128, 128), [16, 16], 0),
-            new Mario.Sprite('sprites/tiles.png', new Point(144, 128), [16, 16], 0),
-            new Mario.Sprite('sprites/tiles.png', new Point(160, 128), [16, 16], 0),
-            new Mario.Sprite('sprites/tiles.png', new Point(128, 144), [16, 16], 0),
-            new Mario.Sprite('sprites/tiles.png', new Point(144, 144), [16, 16], 0),
-            new Mario.Sprite('sprites/tiles.png', new Point(160, 144), [16, 16], 0)
+            new Mario.Sprite('sprites/tiles.png', new Point(128, 128), new Size(16, 16), 0),
+            new Mario.Sprite('sprites/tiles.png', new Point(144, 128), new Size(16, 16), 0),
+            new Mario.Sprite('sprites/tiles.png', new Point(160, 128), new Size(16, 16), 0),
+            new Mario.Sprite('sprites/tiles.png', new Point(128, 144), new Size(16, 16), 0),
+            new Mario.Sprite('sprites/tiles.png', new Point(144, 144), new Size(16, 16), 0),
+            new Mario.Sprite('sprites/tiles.png', new Point(160, 144), new Size(16, 16), 0)
         ],
-        bushSprite: new Mario.Sprite('sprites/tiles.png', new Point(176, 144), [48, 16], 0),
+        bushSprite: new Mario.Sprite('sprites/tiles.png', new Point(176, 144), new Size(48, 16), 0),
         bushSprites: [
-            new Mario.Sprite('sprites/tiles.png', new Point(176, 144), [16, 16], 0),
-            new Mario.Sprite('sprites/tiles.png', new Point(192, 144), [16, 16], 0),
-            new Mario.Sprite('sprites/tiles.png', new Point(208, 144), [16, 16], 0)
+            new Mario.Sprite('sprites/tiles.png', new Point(176, 144), new Size(16, 16), 0),
+            new Mario.Sprite('sprites/tiles.png', new Point(192, 144), new Size(16, 16), 0),
+            new Mario.Sprite('sprites/tiles.png', new Point(208, 144), new Size(16, 16), 0)
         ],
         goombaSprite: function () {
-            return new Mario.Sprite('sprites/enemy.png', new Point(0, 16), [16, 16], 3, [0, 1]);
+            return new Mario.Sprite('sprites/enemy.png', new Point(0, 16), new Size(16, 16), 3, [0, 1]);
         },
         koopaSprite: function () {
-            return new Mario.Sprite('sprites/enemy.png', new Point(96, 0), [16, 32], 2, [0, 1]);
+            return new Mario.Sprite('sprites/enemy.png', new Point(96, 0), new Size(16, 32), 2, [0, 1]);
         },
         flagPoleSprites: [
-            new Mario.Sprite('sprites/tiles.png', new Point(256, 128), [16, 16], 0),
-            new Mario.Sprite('sprites/tiles.png', new Point(256, 144), [16, 16], 0),
-            new Mario.Sprite('sprites/items.png', new Point(128, 32), [16, 16], 0)
+            new Mario.Sprite('sprites/tiles.png', new Point(256, 128), new Size(16, 16), 0),
+            new Mario.Sprite('sprites/tiles.png', new Point(256, 144), new Size(16, 16), 0),
+            new Mario.Sprite('sprites/items.png', new Point(128, 32), new Size(16, 16), 0)
         ]
     };
     level = new Mario.Level(levelOptions);

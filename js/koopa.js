@@ -195,7 +195,7 @@ class Koopa extends Entity {
             this.shell = 360;
             this.sprite.pos.x += 64;
             this.sprite.pos.y += 16;
-            this.sprite.size = [16, 16];
+            this.sprite.size = new Size(16, 16);
             this.hitbox = new BoundBox(2, 0, 12, 16);
             this.sprite.speed = 0;
             this.frames = [0, 1];
@@ -210,7 +210,7 @@ class Koopa extends Entity {
             return;
         this.flipping = true;
         this.sprite.pos = new Point(160, 0);
-        this.sprite.size = [16, 16];
+        this.sprite.size = new Size(16, 16);
         this.hitbox = new BoundBox(2, 0, 12, 16);
         this.sprite.speed = 0;
         this.vel.x = 0;

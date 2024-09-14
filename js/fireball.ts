@@ -4,7 +4,7 @@ class Fireball extends Entity {
   constructor(pos: Point) {
     super({
       pos: pos,
-      sprite: new Mario.Sprite('sprites/items.png', new Point(96, 144), [8, 8], 5, [0, 1, 2, 3]),
+      sprite: new Mario.Sprite('sprites/items.png', new Point(96, 144), new Size(8, 8), 5, [0, 1, 2, 3]),
       hitbox: new BoundBox(0, 0, 8, 8)
     });
     this.hit = 0;
@@ -32,7 +32,7 @@ class Fireball extends Entity {
   update(dt: number) {
     if (this.hit == 1) {
       this.sprite.pos = new Point(96, 160);
-      this.sprite.size = [16, 16];
+      this.sprite.size = new Size(16, 16);
       this.sprite.frames = [0, 1, 2];
       this.sprite.speed = 8;
       this.hit += 1;

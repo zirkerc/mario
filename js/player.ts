@@ -18,7 +18,7 @@ class Player extends Entity {
 	starTime: number;
 	flagging: boolean;
 	powerSprites: Point[];
-	powerSizes: number[][];
+	powerSizes: Size[];
 	shift: number[];
 	touchedItem: number;
 	waiting: number;
@@ -29,7 +29,7 @@ class Player extends Entity {
 	constructor(pos: Point) {
 		super({
 			pos: pos,
-			sprite: new Mario.Sprite('sprites/player.png', new Point(80, 32), [16, 16], 0),
+			sprite: new Mario.Sprite('sprites/player.png', new Point(80, 32), new Size(16, 16), 0),
 			hitbox: new BoundBox(0, 0, 16, 16)
 		});
 
@@ -304,10 +304,10 @@ class Player extends Entity {
 			this.flagging = false;
 			this.vel.x = 1.5;
 			if (this.pos.x >= this.targetPos.x) {
-				this.sprite.size = [0, 0];
+				this.sprite.size = new Size(0, 0);
 				this.vel = new Point(0, 0);
 				window.setTimeout(function () {
-					player.sprite.size = player.power === 0 ? [16, 16] : [16, 32];
+					player.sprite.size = player.power === 0 ? new Size(16, 16) : new Size(16, 32);
 					player.exiting = false;
 					player.noInput = false;
 					level.loader();
@@ -364,7 +364,7 @@ class Player extends Entity {
 			this.sprite.pos.x = 80;
 			var newy = this.sprite.pos.y - 32;
 			this.powerSprites = [new Point(80, newy + 32), new Point(80, newy + 32), new Point(320, newy), new Point(80, newy), new Point(128, newy)];
-			this.powerSizes = [[16, 16], [16, 16], [16, 32], [16, 32], [16, 32]];
+			this.powerSizes = [new Size(16, 16), new Size(16, 16), new Size(16, 32), new Size(16, 32), new Size(16, 32)];
 			this.shift = [0, 16, -16, 0, -16];
 			this.power = 1;
 			this.hitbox = new BoundBox(0, 0, 16, 32);
@@ -373,7 +373,7 @@ class Player extends Entity {
 			this.powerSprites = [new Point(curx, 96), new Point(curx, level.invincibility[0]),
 			new Point(curx, level.invincibility[1]), new Point(curx, level.invincibility[2]),
 			new Point(curx, 96)];
-			this.powerSizes = [[16, 32], [16, 32], [16, 32], [16, 32], [16, 32]];
+			this.powerSizes = [new Size(16, 32), new Size(16, 32), new Size(16, 32), new Size(16, 32), new Size(16, 32)];
 			this.shift = [0, 0, 0, 0, 0];
 			this.power = 2;
 		} else {
@@ -392,7 +392,7 @@ class Player extends Entity {
 			this.shift = [0, 16, -16, 16];
 			this.sprite.pos = new Point(160, 0);
 			this.powerSprites = [new Point(160, 0), new Point(240, 32), new Point(240, 0), new Point(160, 32)];
-			this.powerSizes = [[16, 32], [16, 16], [16, 32], [16, 16]];
+			this.powerSizes = [new Size(16, 32), new Size(16, 16), new Size(16, 32), new Size(16, 16)];
 			this.invincibility = 120;
 			this.power = 0;
 			this.hitbox = new BoundBox(0, 0, 16, 16);
