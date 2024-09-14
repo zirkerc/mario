@@ -3,7 +3,7 @@ class Bcoin extends Entity {
   active: boolean;
   targetpos: number;
 
-  constructor(pos) {
+  constructor(pos: Point) {
     super({
       pos: pos,
       sprite: level.bcoinSprite(),
@@ -19,22 +19,22 @@ class Bcoin extends Entity {
     this.idx = level.items.length;
     level.items.push(this);
     this.active = true;
-    this.vel[1] = -12;
-    this.targetpos = this.pos[1] - 32;
+    this.vel.y = -12;
+    this.targetpos = this.pos.y - 32;
   }
 
   update(dt: number) {
     if (!this.active) return;
 
-    if (this.vel[1] > 0 && this.pos[1] >= this.targetpos) {
+    if (this.vel.y > 0 && this.pos.y >= this.targetpos) {
       player.coins += 1;
       //spawn a score thingy.
       delete level.items[this.idx];
     }
 
-    this.acc[1] = 0.75;
-    this.vel[1] += this.acc[1];
-    this.pos[1] += this.vel[1];
+    this.acc.y = 0.75;
+    this.vel.y += this.acc.y;
+    this.pos.y += this.vel.y;
     this.sprite.update(dt);
   }
 

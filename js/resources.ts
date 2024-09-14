@@ -1,11 +1,11 @@
 //simple resource loader
 (function () {
-    var resourceCache = {};
+    var resourceCache: Record<string, HTMLImageElement | false> = {};
     var loading = [];
-    var readyCallbacks = [];
+    var readyCallbacks: (() => void)[] = [];
 
     // Load an image url or an array of image urls
-    function load(urlOrArr) {
+    function load(urlOrArr: string | string[]) {
         if (urlOrArr instanceof Array) {
             urlOrArr.forEach(function (url) {
                 _load(url);
@@ -16,7 +16,7 @@
         }
     }
 
-    function _load(url) {
+    function _load(url: string) {
         if (resourceCache[url]) {
             return resourceCache[url];
         }
@@ -34,8 +34,8 @@
         }
     }
 
-    function get(url) {
-        return resourceCache[url];
+    function get(url: string) {
+        return resourceCache[url] as HTMLImageElement;
     }
 
     function isReady() {
@@ -49,7 +49,7 @@
         return ready;
     }
 
-    function onReady(func) {
+    function onReady(func: () => void) {
         readyCallbacks.push(func);
     }
 

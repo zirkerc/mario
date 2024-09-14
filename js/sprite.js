@@ -41,8 +41,8 @@ class Sprite {
         else {
             frame = 0;
         }
-        var x = this.pos[0];
-        var y = this.pos[1];
+        var x = this.pos.x;
+        var y = this.pos.y;
         x += frame * this.size[0];
         ctx.drawImage(resources.get(this.img), x + (1 / 3), y + (1 / 3), this.size[0] - (2 / 3), this.size[1] - (2 / 3), Math.round(posx - vX), Math.round(posy - vY), this.size[0], this.size[1]);
     }

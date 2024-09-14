@@ -1,7 +1,7 @@
 interface Input {
-    update();
-    isDown(key: string);
-    reset();
+    update(): void;
+    isDown(key: string): boolean;
+    reset(): void;
 }
 
 interface GamepadAPI {
@@ -12,17 +12,17 @@ interface GamepadAPI {
     buttonsCache: string[];
     buttonsStatus: string[];
     buttons: Record<number, string>;
-    connect(evt: { gamepad: Gamepad });
-    disconnect();
-    update();
-    buttonPressed(key: string, hold: boolean);
+    connect(evt: { gamepad: Gamepad }): void;
+    disconnect(): void;
+    update(): void;
+    buttonPressed(key: string, hold: boolean): boolean;
 
 }
 (function () {
-    var pressedKeys = {};
-    var pressedButtons = {};
+    var pressedKeys: Record<string, boolean> = {};
+    var pressedButtons: Record<string, boolean> = {};
 
-    function setKey(event, status) {
+    function setKey(event: KeyboardEvent, status: boolean) {
         var code = event.keyCode;
         var key;
         switch (code) {

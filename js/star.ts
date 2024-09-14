@@ -3,7 +3,7 @@ class Star extends Entity {
   waiting: number;
   idx: number;
   targetpos: Point;
-  constructor(pos) {
+  constructor(pos: Point) {
     super({
       pos: pos,
       sprite: level.starSprite,
@@ -16,64 +16,64 @@ class Star extends Entity {
 
   render(ctx: CanvasRenderingContext2D, vX: number, vY: number) {
     if (this.spawning > 1) return;
-    this.sprite.render(ctx, this.pos[0], this.pos[1], vX, vY);
+    this.sprite.render(ctx, this.pos.x, this.pos.y, vX, vY);
   }
 
   spawn() {
     this.idx = level.items.length;
     level.items.push(this);
     this.spawning = 12;
-    this.targetpos = [];
-    this.targetpos[0] = this.pos[0];
-    this.targetpos[1] = this.pos[1] - 16;
+    this.targetpos = new Point();
+    this.targetpos.x = this.pos.x;
+    this.targetpos.y = this.pos.y - 16;
   }
 
   update(dt: number) {
     if (this.spawning > 1) {
       this.spawning -= 1;
-      if (this.spawning == 1) this.vel[1] = -.5;
+      if (this.spawning == 1) this.vel.y = -.5;
       return;
     }
     if (this.spawning) {
-      if (this.pos[1] <= this.targetpos[1]) {
-        this.pos[1] = this.targetpos[1];
-        this.vel[1] = 0;
+      if (this.pos.y <= this.targetpos.y) {
+        this.pos.y = this.targetpos.y;
+        this.vel.y = 0;
         this.waiting = 5;
         this.spawning = 0;
-        this.vel[0] = 1;
+        this.vel.x = 1;
       }
     } else {
-      this.acc[1] = 0.2;
+      this.acc.y = 0.2;
     }
 
     if (this.standing) {
       this.standing = false;
-      this.vel[1] = -3;
+      this.vel.y = -3;
     }
 
     if (this.waiting) {
       this.waiting -= 1;
     } else {
-      this.vel[1] += this.acc[1];
-      this.pos[0] += this.vel[0];
-      this.pos[1] += this.vel[1];
+      this.vel.y += this.acc.y;
+      this.pos.x += this.vel.x;
+      this.pos.y += this.vel.y;
       this.sprite.update(dt);
     }
   }
 
   collideWall() {
-    this.vel[0] = -this.vel[0];
+    this.vel.x = -this.vel.x;
   }
 
   checkCollisions() {
     if (this.spawning) {
       return;
     }
-    var h = this.pos[1] % 16 == 0 ? 1 : 2;
-    var w = this.pos[0] % 16 == 0 ? 1 : 2;
+    var h = this.pos.y % 16 == 0 ? 1 : 2;
+    var w = this.pos.x % 16 == 0 ? 1 : 2;
 
-    var baseX = Math.floor(this.pos[0] / 16);
-    var baseY = Math.floor(this.pos[1] / 16);
+    var baseX = Math.floor(this.pos.x / 16);
+    var baseY = Math.floor(this.pos.y / 16);
 
     if (baseY + h > 15) {
       delete level.items[this.idx];
@@ -97,8 +97,8 @@ class Star extends Entity {
   //we have access to player everywhere, so let's just do this.
   isPlayerCollided() {
     //the first two elements of the hitbox array are an offset, so let's do this now.
-    var hpos1 = [this.pos[0] + this.hitbox[0], this.pos[1] + this.hitbox[1]];
-    var hpos2 = [player.pos[0] + player.hitbox[0], player.pos[1] + player.hitbox[1]];
+    var hpos1 = [this.pos.x + this.hitbox[0], this.pos.y + this.hitbox[1]];
+    var hpos2 = [player.pos.x + player.hitbox[0], player.pos.y + player.hitbox[1]];
 
     //if the hitboxes actually overlap
     if (!(hpos1[0] > hpos2[0] + player.hitbox[2] || (hpos1[0] + this.hitbox[2] < hpos2[0]))) {
@@ -109,7 +109,7 @@ class Star extends Entity {
   }
 
   bump() {
-    this.vel[1] = -2;
+    this.vel.y = -2;
   }
 }
 Mario.Star = Star;

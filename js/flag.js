@@ -7,22 +7,22 @@ class Flag {
     hit;
     constructor(pos) {
         //afaik flags always have the same height and Y-position
-        this.pos = [pos, 49];
+        this.pos = new Point(pos, 49);
         this.hitbox = [0, 0, 0, 0];
-        this.vel = [0, 0];
-        this.acc = [0, 0];
+        this.vel = new Point(0, 0);
+        this.acc = new Point(0, 0);
     }
     collideWall() {
         ;
     }
     update(dt) {
-        if (!this.done && this.pos[1] >= 170) {
-            this.vel = [0, 0];
-            this.pos[1] = 170;
+        if (!this.done && this.pos.y >= 170) {
+            this.vel = new Point(0, 0);
+            this.pos.y = 170;
             player.exit();
             this.done = true;
         }
-        this.pos[1] += this.vel[1];
+        this.pos.y += this.vel.y;
     }
     checkCollisions() {
         this.isPlayerCollided();
@@ -30,7 +30,7 @@ class Flag {
     isPlayerCollided() {
         if (this.hit)
             return;
-        if (player.pos[0] + 8 >= this.pos[0]) {
+        if (player.pos.x + 8 >= this.pos.x) {
             music.overworld.pause();
             sounds.flagpole.play();
             setTimeout(function () {
@@ -38,11 +38,11 @@ class Flag {
             }, 2000);
             this.hit = true;
             player.flag();
-            this.vel = [0, 2];
+            this.vel = new Point(0, 2);
         }
     }
     render() {
-        level.flagpoleSprites[2].render(ctx, this.pos[0] - 8, this.pos[1], vX, vY);
+        level.flagpoleSprites[2].render(ctx, this.pos.x - 8, this.pos.y, vX, vY);
     }
 }
 Mario.Flag = Flag;

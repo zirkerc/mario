@@ -1,9 +1,46 @@
+interface LevelOptions {
+  playerPos?: Point;
+  scrolling: boolean;
+  loader: () => void;
+  background: string;
+  exit?: number;
+  floorSprite: Sprite;
+  cloudSprite?: Sprite;
+  wallSprite: Sprite;
+  brickSprite: Sprite;
+  rubbleSprite?: () => Sprite;
+  brickBounceSprite: Sprite;
+  ublockSprite: Sprite;
+  superShroomSprite?: Sprite;
+  fireFlowerSprite?: Sprite;
+  starSprite?: Sprite;
+  coinSprite?: () => Sprite;
+  bcoinSprite?: () => Sprite;
+  goombaSprite?: () => Sprite;
+  koopaSprite?: () => Sprite;
+  pipeLEndSprite: Sprite;
+  pipeREndSprite: Sprite;
+  pipeLMidSprite: Sprite;
+  pipeRMidSprite: Sprite;
+  pipeUpMid: Sprite;
+  pipeSideMid: Sprite;
+  pipeLeft: Sprite;
+  pipeTop: Sprite;
+  flagPoleSprites?: Sprite[];
+  LPipeSprites?: Sprite[];
+  cloudSprites?: Sprite[];
+  hillSprites?: Sprite[];
+  bushSprite?: Sprite;
+  bushSprites?: Sprite[];
+  qblockSprite?: Sprite;
+  invincibility?: number[];
+}
 class Level {
   playerPos: Point;
-  scrolling: any;
-  loader: any;
-  background: any;
-  exit: any;
+  scrolling: boolean;
+  loader: () => void;
+  background: string;
+  exit: number;
   floorSprite: Sprite;
   cloudSprite: Sprite;
   wallSprite: Sprite;
@@ -26,23 +63,23 @@ class Level {
   pipeSideMid: any;
   pipeLeft: any;
   pipeTop: any;
-  flagpoleSprites: Sprite;
-  LPipeSprites: Sprite;
-  cloudSprites: Sprite;
-  hillSprites: Sprite;
+  flagpoleSprites: Sprite[];
+  LPipeSprites: Sprite[];
+  cloudSprites: Sprite[];
+  hillSprites: Sprite[];
   bushSprite: Sprite;
-  bushSprites: Sprite;
+  bushSprites: Sprite[];
   qblockSprite: Sprite;
-  invincibility: any;
-  statics: any[];
-  scenery: any[];
-  blocks: any[];
-  enemies: any[];
+  invincibility: number[];
+  statics: (Renderable & Collidable)[][];
+  scenery: Renderable[][];
+  blocks: (Renderable & Collidable & Updateable)[][];
+  enemies: Enemy[];
   items: any[];
-  pipes: any[];
+  pipes: Pipe[];
 
-  constructor(options) {
-    this.playerPos = options.playerPos;
+  constructor(options: LevelOptions) {
+    this.playerPos = options.playerPos ?? Point.zero();
     this.scrolling = options.scrolling;
     this.loader = options.loader;
     this.background = options.background;
@@ -100,73 +137,73 @@ class Level {
 
   };
 
-  putFloor(start, end) {
+  putFloor(start: number, end: number) {
     for (var i = start; i < end; i++) {
-      this.statics[13][i] = new Mario.Floor([16 * i, 208], this.floorSprite);
-      this.statics[14][i] = new Mario.Floor([16 * i, 224], this.floorSprite);
+      this.statics[13][i] = new Mario.Floor(new Point(16 * i, 208), this.floorSprite);
+      this.statics[14][i] = new Mario.Floor(new Point(16 * i, 224), this.floorSprite);
     }
   };
 
-  putGoomba(x, y) {
-    this.enemies.push(new Mario.Goomba([16 * x, 16 * y], this.goombaSprite()));
+  putGoomba(x: number, y: number) {
+    this.enemies.push(new Mario.Goomba(new Point(16 * x, 16 * y), this.goombaSprite()));
   };
 
-  putKoopa(x, y) {
-    this.enemies.push(new Mario.Koopa([16 * x, 16 * y], this.koopaSprite(), false));
+  putKoopa(x: number, y: number) {
+    this.enemies.push(new Mario.Koopa(new Point(16 * x, 16 * y), this.koopaSprite(), false));
   };
 
-  putWall(x, y, height) {
+  putWall(x: number, y: number, height: number) {
     //y is the bottom of the wall in this case.
     for (var i = y - height; i < y; i++) {
-      this.statics[i][x] = new Mario.Floor([16 * x, 16 * i], this.wallSprite);
+      this.statics[i][x] = new Mario.Floor(new Point(16 * x, 16 * i), this.wallSprite);
     }
   };
 
-  putPipe(x, y, height) {
+  putPipe(x: number, y: number, height: number) {
     for (var i = y - height; i < y; i++) {
       if (i === y - height) {
-        this.statics[i][x] = new Mario.Floor([16 * x, 16 * i], this.pipeLEndSprite);
-        this.statics[i][x + 1] = new Mario.Floor([16 * x + 16, 16 * i], this.pipeREndSprite);
+        this.statics[i][x] = new Mario.Floor(new Point(16 * x, 16 * i), this.pipeLEndSprite);
+        this.statics[i][x + 1] = new Mario.Floor(new Point(16 * x + 16, 16 * i), this.pipeREndSprite);
       } else {
-        this.statics[i][x] = new Mario.Floor([16 * x, 16 * i], this.pipeLMidSprite);
-        this.statics[i][x + 1] = new Mario.Floor([16 * x + 16, 16 * i], this.pipeRMidSprite);
+        this.statics[i][x] = new Mario.Floor(new Point(16 * x, 16 * i), this.pipeLMidSprite);
+        this.statics[i][x + 1] = new Mario.Floor(new Point(16 * x + 16, 16 * i), this.pipeRMidSprite);
       }
     }
   };
 
   //sometimes, pipes don't go straight up and down.
-  putLeftPipe(x, y) {
-    this.statics[y][x] = new Mario.Floor([16 * x, 16 * y], this.LPipeSprites[0]);
-    this.statics[y + 1][x] = new Mario.Floor([16 * x, 16 * (y + 1)], this.LPipeSprites[1]);
-    this.statics[y][x + 1] = new Mario.Floor([16 * (x + 1), 16 * y], this.LPipeSprites[2]);
-    this.statics[y + 1][x + 1] = new Mario.Floor([16 * (x + 1), 16 * (y + 1)], this.LPipeSprites[3]);
-    this.statics[y][x + 2] = new Mario.Floor([16 * (x + 2), 16 * y], this.LPipeSprites[4]);
-    this.statics[y + 1][x + 2] = new Mario.Floor([16 * (x + 2), 16 * (y + 1)], this.LPipeSprites[5]);
+  putLeftPipe(x: number, y: number) {
+    this.statics[y][x] = new Mario.Floor(new Point(16 * x, 16 * y), this.LPipeSprites[0]);
+    this.statics[y + 1][x] = new Mario.Floor(new Point(16 * x, 16 * (y + 1)), this.LPipeSprites[1]);
+    this.statics[y][x + 1] = new Mario.Floor(new Point(16 * (x + 1), 16 * y), this.LPipeSprites[2]);
+    this.statics[y + 1][x + 1] = new Mario.Floor(new Point(16 * (x + 1), 16 * (y + 1)), this.LPipeSprites[3]);
+    this.statics[y][x + 2] = new Mario.Floor(new Point(16 * (x + 2), 16 * y), this.LPipeSprites[4]);
+    this.statics[y + 1][x + 2] = new Mario.Floor(new Point(16 * (x + 2), 16 * (y + 1)), this.LPipeSprites[5]);
   };
 
-  putCoin(x, y) {
+  putCoin(x: number, y: number) {
     this.items.push(new Mario.Coin(
-      [x * 16, y * 16],
+      new Point(x * 16, y * 16),
       this.coinSprite()
     ));
   };
 
-  putCloud(x, y) {
-    this.scenery[y][x] = new Mario.Prop([x * 16, y * 16], this.cloudSprite);
+  putCloud(x: number, y: number) {
+    this.scenery[y][x] = new Mario.Prop(new Point(x * 16, y * 16), this.cloudSprite);
   };
 
-  putQBlock(x, y, item) {
+  putQBlock(x: number, y: number, item: any) {
     this.blocks[y][x] = new Mario.Block({
-      pos: [x * 16, y * 16],
+      pos: new Point(x * 16, y * 16),
       item: item,
       sprite: this.qblockSprite,
       usedSprite: this.ublockSprite
     });
   };
 
-  putBrick(x, y, item) {
+  putBrick(x: number, y: number, item: any) {
     this.blocks[y][x] = new Mario.Block({
-      pos: [x * 16, y * 16],
+      pos: new Point(x * 16, y * 16),
       item: item,
       sprite: this.brickSprite,
       bounceSprite: this.brickBounceSprite,
@@ -175,86 +212,86 @@ class Level {
     });
   };
 
-  putBigHill(x, y) {
+  putBigHill(x: number, y: number) {
     var px = x * 16, py = y * 16;
-    this.scenery[y][x] = new Mario.Prop([px, py], this.hillSprites[0]);
-    this.scenery[y][x + 1] = new Mario.Prop([px + 16, py], this.hillSprites[3]);
-    this.scenery[y - 1][x + 1] = new Mario.Prop([px + 16, py - 16], this.hillSprites[0]);
-    this.scenery[y][x + 2] = new Mario.Prop([px + 32, py], this.hillSprites[4]);
-    this.scenery[y - 1][x + 2] = new Mario.Prop([px + 32, py - 16], this.hillSprites[3]);
-    this.scenery[y - 2][x + 2] = new Mario.Prop([px + 32, py - 32], this.hillSprites[1]);
-    this.scenery[y][x + 3] = new Mario.Prop([px + 48, py], this.hillSprites[5]);
-    this.scenery[y - 1][x + 3] = new Mario.Prop([px + 48, py - 16], this.hillSprites[2]);
-    this.scenery[y][x + 4] = new Mario.Prop([px + 64, py], this.hillSprites[2]);
+    this.scenery[y][x] = new Mario.Prop(new Point(px, py), this.hillSprites[0]);
+    this.scenery[y][x + 1] = new Mario.Prop(new Point(px + 16, py), this.hillSprites[3]);
+    this.scenery[y - 1][x + 1] = new Mario.Prop(new Point(px + 16, py - 16), this.hillSprites[0]);
+    this.scenery[y][x + 2] = new Mario.Prop(new Point(px + 32, py), this.hillSprites[4]);
+    this.scenery[y - 1][x + 2] = new Mario.Prop(new Point(px + 32, py - 16), this.hillSprites[3]);
+    this.scenery[y - 2][x + 2] = new Mario.Prop(new Point(px + 32, py - 32), this.hillSprites[1]);
+    this.scenery[y][x + 3] = new Mario.Prop(new Point(px + 48, py), this.hillSprites[5]);
+    this.scenery[y - 1][x + 3] = new Mario.Prop(new Point(px + 48, py - 16), this.hillSprites[2]);
+    this.scenery[y][x + 4] = new Mario.Prop(new Point(px + 64, py), this.hillSprites[2]);
   };
 
-  putBush(x, y) {
-    this.scenery[y][x] = new Mario.Prop([x * 16, y * 16], this.bushSprite);
+  putBush(x: number, y: number) {
+    this.scenery[y][x] = new Mario.Prop(new Point(x * 16, y * 16), this.bushSprite);
   };
 
-  putThreeBush(x, y) {
+  putThreeBush(x: number, y: number) {
     let px = x * 16;
     let py = y * 16;
-    this.scenery[y][x] = new Mario.Prop([px, py], this.bushSprites[0]);
-    this.scenery[y][x + 1] = new Mario.Prop([px + 16, py], this.bushSprites[1]);
-    this.scenery[y][x + 2] = new Mario.Prop([px + 32, py], this.bushSprites[1]);
-    this.scenery[y][x + 3] = new Mario.Prop([px + 48, py], this.bushSprites[1]);
-    this.scenery[y][x + 4] = new Mario.Prop([px + 64, py], this.bushSprites[2]);
+    this.scenery[y][x] = new Mario.Prop(new Point(px, py), this.bushSprites[0]);
+    this.scenery[y][x + 1] = new Mario.Prop(new Point(px + 16, py), this.bushSprites[1]);
+    this.scenery[y][x + 2] = new Mario.Prop(new Point(px + 32, py), this.bushSprites[1]);
+    this.scenery[y][x + 3] = new Mario.Prop(new Point(px + 48, py), this.bushSprites[1]);
+    this.scenery[y][x + 4] = new Mario.Prop(new Point(px + 64, py), this.bushSprites[2]);
   };
 
-  putTwoBush(x, y) {
+  putTwoBush(x: number, y: number) {
     let px = x * 16;
     let py = y * 16;
-    this.scenery[y][x] = new Mario.Prop([px, py], this.bushSprites[0]);
-    this.scenery[y][x + 1] = new Mario.Prop([px + 16, py], this.bushSprites[1]);
-    this.scenery[y][x + 2] = new Mario.Prop([px + 32, py], this.bushSprites[1]);
-    this.scenery[y][x + 3] = new Mario.Prop([px + 48, py], this.bushSprites[2]);
+    this.scenery[y][x] = new Mario.Prop(new Point(px, py), this.bushSprites[0]);
+    this.scenery[y][x + 1] = new Mario.Prop(new Point(px + 16, py), this.bushSprites[1]);
+    this.scenery[y][x + 2] = new Mario.Prop(new Point(px + 32, py), this.bushSprites[1]);
+    this.scenery[y][x + 3] = new Mario.Prop(new Point(px + 48, py), this.bushSprites[2]);
   };
 
-  putSmallHill(x, y) {
+  putSmallHill(x: number, y: number) {
     var px = x * 16, py = y * 16;
-    this.scenery[y][x] = new Mario.Prop([px, py], this.hillSprites[0]);
-    this.scenery[y][x + 1] = new Mario.Prop([px + 16, py], this.hillSprites[3]);
-    this.scenery[y - 1][x + 1] = new Mario.Prop([px + 16, py - 16], this.hillSprites[1]);
-    this.scenery[y][x + 2] = new Mario.Prop([px + 32, py], this.hillSprites[2]);
+    this.scenery[y][x] = new Mario.Prop(new Point(px, py), this.hillSprites[0]);
+    this.scenery[y][x + 1] = new Mario.Prop(new Point(px + 16, py), this.hillSprites[3]);
+    this.scenery[y - 1][x + 1] = new Mario.Prop(new Point(px + 16, py - 16), this.hillSprites[1]);
+    this.scenery[y][x + 2] = new Mario.Prop(new Point(px + 32, py), this.hillSprites[2]);
   };
 
-  putTwoCloud(x, y) {
+  putTwoCloud(x: number, y: number) {
     let px = x * 16;
     let py = y * 16;
-    this.scenery[y][x] = new Mario.Prop([px, py], this.cloudSprites[0]);
-    this.scenery[y][x + 1] = new Mario.Prop([px + 16, py], this.cloudSprites[1]);
-    this.scenery[y][x + 2] = new Mario.Prop([px + 32, py], this.cloudSprites[1]);
-    this.scenery[y][x + 3] = new Mario.Prop([px + 48, py], this.cloudSprites[2]);
+    this.scenery[y][x] = new Mario.Prop(new Point(px, py), this.cloudSprites[0]);
+    this.scenery[y][x + 1] = new Mario.Prop(new Point(px + 16, py), this.cloudSprites[1]);
+    this.scenery[y][x + 2] = new Mario.Prop(new Point(px + 32, py), this.cloudSprites[1]);
+    this.scenery[y][x + 3] = new Mario.Prop(new Point(px + 48, py), this.cloudSprites[2]);
   };
 
-  putThreeCloud(x, y) {
+  putThreeCloud(x: number, y: number) {
     let px = x * 16;
     let py = y * 16;
-    this.scenery[y][x] = new Mario.Prop([px, py], this.cloudSprites[0]);
-    this.scenery[y][x + 1] = new Mario.Prop([px + 16, py], this.cloudSprites[1]);
-    this.scenery[y][x + 2] = new Mario.Prop([px + 32, py], this.cloudSprites[1]);
-    this.scenery[y][x + 3] = new Mario.Prop([px + 48, py], this.cloudSprites[1]);
-    this.scenery[y][x + 4] = new Mario.Prop([px + 64, py], this.cloudSprites[2]);
+    this.scenery[y][x] = new Mario.Prop(new Point(px, py), this.cloudSprites[0]);
+    this.scenery[y][x + 1] = new Mario.Prop(new Point(px + 16, py), this.cloudSprites[1]);
+    this.scenery[y][x + 2] = new Mario.Prop(new Point(px + 32, py), this.cloudSprites[1]);
+    this.scenery[y][x + 3] = new Mario.Prop(new Point(px + 48, py), this.cloudSprites[1]);
+    this.scenery[y][x + 4] = new Mario.Prop(new Point(px + 64, py), this.cloudSprites[2]);
   };
 
-  putRealPipe(x, y, length, direction, destination) {
+  putRealPipe(x: number, y: number, length: number, direction: PipeDirection, destination: () => void) {
     let px = x * 16;
     let py = y * 16;
     this.pipes.push(new Mario.Pipe({
-      pos: [px, py],
+      pos: new Point(px, py),
       length: length,
       direction: direction,
       destination: destination
     }));
   }
 
-  putFlagpole(x) {
-    this.statics[12][x] = new Mario.Floor([16 * x, 192], this.wallSprite);
+  putFlagpole(x: number) {
+    this.statics[12][x] = new Mario.Floor(new Point(16 * x, 192), this.wallSprite);
     for (let i = 3; i < 12; i++) {
-      this.scenery[i][x] = new Mario.Prop([16 * x, 16 * i], this.flagpoleSprites[1])
+      this.scenery[i][x] = new Mario.Prop(new Point(16 * x, 16 * i), this.flagpoleSprites[1])
     }
-    this.scenery[2][x] = new Mario.Prop([16 * x, 32], this.flagpoleSprites[0]);
+    this.scenery[2][x] = new Mario.Prop(new Point(16 * x, 32), this.flagpoleSprites[0]);
     this.items.push(new Mario.Flag(16 * x));
   }
 }

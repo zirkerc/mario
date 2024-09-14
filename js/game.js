@@ -1,8 +1,12 @@
 var requestAnimFrame = (function () {
     return window.requestAnimationFrame ||
+        //@ts-ignore
         window["webkitRequestAnimationFrame"] ||
+        //@ts-ignore
         window["mozRequestAnimationFrame"] ||
+        //@ts-ignore
         window["oRequestAnimationFrame"] ||
+        //@ts-ignore
         window["msRequestAnimationFrame"] ||
         function (callback) {
             window.setTimeout(callback, 1000 / 60);
@@ -13,7 +17,7 @@ var canvas = document.createElement("canvas");
 var ctx = canvas.getContext('2d');
 var updateables = [];
 var fireballs = [];
-var player = new Mario.Player([0, 0]);
+var player = new Mario.Player(new Point(0, 0));
 //we might have to get the size and calculate the scaling
 //but this method should let us make it however big.
 //Cool!
@@ -145,11 +149,11 @@ function updateEntities(dt, gameTime) {
     });
     //This should stop the jump when he switches sides on the flag.
     if (player.exiting) {
-        if (player.pos[0] > vX + 96)
-            vX = player.pos[0] - 96;
+        if (player.pos.x > vX + 96)
+            vX = player.pos.x - 96;
     }
-    else if (level.scrolling && player.pos[0] > vX + 80) {
-        vX = player.pos[0] - 80;
+    else if (level.scrolling && player.pos.x > vX + 80) {
+        vX = player.pos.x - 80;
     }
     if (player.powering.length !== 0 || player.dying) {
         return;

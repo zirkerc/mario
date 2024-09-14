@@ -11,10 +11,10 @@ interface BlockOptions extends Omit<EntityOptions, "hitbox"> {
 class Block extends Floor {
   item: any;
   usedSprite: any;
-  bounceSprite: any;
-  breakable: any;
-  opos: any[];
-  osprite: any;
+  bounceSprite: Sprite;
+  breakable: boolean;
+  opos: Point;
+  osprite: Sprite;
   constructor(options: BlockOptions) {
     super(options.pos, options.sprite);
     // super({
@@ -33,7 +33,7 @@ class Block extends Floor {
   break() {
     sounds.breakBlock.play();
     (new Mario.Rubble()).spawn(this.pos);
-    var x = this.pos[0] / 16, y = this.pos[1] / 16;
+    var x = this.pos.x / 16, y = this.pos.y / 16;
     delete level.blocks[y][x];
   }
   // pos(pos: Point) {
@@ -50,9 +50,9 @@ class Block extends Floor {
         this.item.spawn();
         this.item = null;
       }
-      this.opos = [];
-      this.opos[0] = this.pos[0];
-      this.opos[1] = this.pos[1];
+      this.opos = Point.zero();
+      this.opos.x = this.pos.x;
+      this.opos.y = this.pos.y;
       if (this.bounceSprite) {
         this.osprite = this.sprite;
         this.sprite = this.bounceSprite;
@@ -60,17 +60,17 @@ class Block extends Floor {
         this.sprite = this.usedSprite;
       }
 
-      this.vel[1] = -2;
+      this.vel.y = -2;
     }
   }
 
-  update(dt, gameTime) {
+  update(dt: number, gameTime: number) {
     if (!this.standing) {
-      if (this.pos[1] < this.opos[1] - 8) {
-        this.vel[1] = 2;
+      if (this.pos.y < this.opos.y - 8) {
+        this.vel.y = 2;
       }
-      if (this.pos[1] > this.opos[1]) {
-        this.vel[1] = 0;
+      if (this.pos.y > this.opos.y) {
+        this.vel.y = 0;
         this.pos = this.opos;
         if (this.osprite) {
           this.sprite = this.osprite;
@@ -79,13 +79,13 @@ class Block extends Floor {
       }
     } else {
       if (this.sprite === this.usedSprite) {
-        var x = this.pos[0] / 16, y = this.pos[1] / 16;
+        var x = this.pos.x / 16, y = this.pos.y / 16;
         level.statics[y][x] = new Mario.Floor(this.pos, this.usedSprite);
         delete level.blocks[y][x];
       }
     }
 
-    this.pos[1] += this.vel[1];
+    this.pos.y += this.vel.y;
     this.sprite.update(dt, gameTime);
   }
 }

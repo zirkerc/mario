@@ -3,6 +3,7 @@ declare let resources: Resources;
 declare let input: Input;
 
 declare let Mario: {
+	oneonetunnel: () => void;
 	Bcoin: typeof Bcoin;
 	Star: typeof Star;
 	Fireflower: any;
@@ -23,6 +24,7 @@ declare let Mario: {
 	Sprite: typeof Sprite
 
 	oneone: () => void;
+	oneoneTunner: () => void
 }
 //}
 
@@ -50,10 +52,10 @@ declare interface Music {
 
 
 declare class Resources {
-	load(resources: string[]);
-	get(url: string);
-	onReady(fn: () => void);
-	isReady();
+	load(resources: string[]): void;
+	get(url: string): HTMLImageElement;
+	onReady(fn: () => void): void;
+	isReady(): boolean;
 }
 
 // declare interface Input {
@@ -62,11 +64,27 @@ declare class Resources {
 // 	reset();
 // }
 
-declare type Point = number[];
+// declare type Point = { x: number; y: number };
 declare type BoundBox = number[];
 declare interface Wall {
 	hitbox: BoundBox;
 	pos: Point;
+}
+
+
+interface Renderable {
+	render(ctx: CanvasRenderingContext2D, vX: number, vY: number): void
+}
+interface Collidable {
+	isCollideWith(entity: Entity): void
+}
+interface Updateable {
+	update(dt: number, v: number): void
+}
+
+interface Enemy extends Entity, Renderable, Collidable, Updateable {
+	flipping: boolean;
+	checkCollisions(): void;
 }
 // declare interface Entity {
 

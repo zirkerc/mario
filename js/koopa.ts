@@ -6,7 +6,7 @@ class Koopa extends Entity {
   turn: boolean;
   flipping: boolean;
   frames: number[];
-  constructor(pos, sprite, para) {
+  constructor(pos: Point, sprite: Sprite, para: boolean) {
 
     //So, funny story. The actual hitboxes don't reach all the way to the ground.
     //What that means is, as long as I use them to keep things on the floor
@@ -22,22 +22,22 @@ class Koopa extends Entity {
 
     this.para = para; //para. As in, is it a paratroopa?
 
-    this.vel[0] = -0.5;
+    this.vel.x = -0.5;
     this.idx = level.enemies.length;
   }
 
   render(ctx: CanvasRenderingContext2D, vX: number, vY: number) {
-    this.sprite.render(ctx, this.pos[0], this.pos[1], vX, vY);
+    this.sprite.render(ctx, this.pos.x, this.pos.y, vX, vY);
   };
 
   update(dt: number, vX: number) {
     if (this.turn) {
-      this.vel[0] = -this.vel[0];
+      this.vel.x = -this.vel.x;
       if (this.shell) sounds.bump.play();
       this.turn = false;
     }
-    if (this.vel[0] != 0) {
-      this.left = (this.vel[0] < 0);
+    if (this.vel.x != 0) {
+      this.left = (this.vel.x < 0);
     }
 
     if (this.left) {
@@ -46,9 +46,9 @@ class Koopa extends Entity {
       this.sprite.img = 'sprites/enemyr.png';
     }
 
-    if (this.pos[0] - vX > 336) { //if we're too far away, do nothing.
+    if (this.pos.x - vX > 336) { //if we're too far away, do nothing.
       return;
-    } else if (this.pos[0] - vX < -32) {
+    } else if (this.pos.x - vX < -32) {
       delete level.enemies[this.idx];
     }
 
@@ -60,7 +60,7 @@ class Koopa extends Entity {
     }
 
     if (this.shell) {
-      if (this.vel[0] == 0) {
+      if (this.vel.x == 0) {
         this.shell -= 1;
         if (this.shell < 120) {
           this.sprite.speed = 5;
@@ -70,13 +70,13 @@ class Koopa extends Entity {
           this.hitbox = [2, 8, 12, 24]
           if (this.left) {
             this.sprite.img = 'sprites/enemyr.png';
-            this.vel[0] = 0.5;
+            this.vel.x = 0.5;
             this.left = false;
           } else {
-            this.vel[0] = -0.5;
+            this.vel.x = -0.5;
             this.left = true;
           }
-          this.pos[1] -= 16;
+          this.pos.y -= 16;
         }
       } else {
         this.shell = 360;
@@ -84,10 +84,10 @@ class Koopa extends Entity {
         this.sprite.setFrame(0);
       }
     }
-    this.acc[1] = 0.2;
-    this.vel[1] += this.acc[1];
-    this.pos[0] += this.vel[0];
-    this.pos[1] += this.vel[1];
+    this.acc.y = 0.2;
+    this.vel.y += this.acc.y;
+    this.pos.x += this.vel.x;
+    this.pos.y += this.vel.y;
     this.sprite.update(dt);
   };
 
@@ -99,13 +99,13 @@ class Koopa extends Entity {
 
   checkCollisions() {
     var h = this.shell ? 1 : 2;
-    if (this.pos[1] % 16 !== 0) {
+    if (this.pos.y % 16 !== 0) {
       h += 1;
     }
-    var w = this.pos[0] % 16 === 0 ? 1 : 2;
+    var w = this.pos.x % 16 === 0 ? 1 : 2;
 
-    var baseX = Math.floor(this.pos[0] / 16);
-    var baseY = Math.floor(this.pos[1] / 16);
+    var baseX = Math.floor(this.pos.x / 16);
+    var baseY = Math.floor(this.pos.y / 16);
 
     if (baseY + h > 15) {
       delete level.enemies[this.idx];
@@ -130,7 +130,7 @@ class Koopa extends Entity {
     level.enemies.forEach(function (enemy) {
       if (enemy === that) { //don't check collisions with ourselves.
         return;
-      } else if (enemy.pos[0] - vX > 336) { //stop checking once we get to far away dudes.
+      } else if (enemy.pos.x - vX > 336) { //stop checking once we get to far away dudes.
         return;
       } else {
         that.isCollideWith(enemy);
@@ -145,30 +145,30 @@ class Koopa extends Entity {
     }
 
     //the first two elements of the hitbox array are an offset, so let's do this now.
-    var hpos1 = [this.pos[0] + this.hitbox[0], this.pos[1] + this.hitbox[1]];
-    var hpos2 = [ent.pos[0] + ent.hitbox[0], ent.pos[1] + ent.hitbox[1]];
+    var hpos1 = [this.pos.x + this.hitbox[0], this.pos.y + this.hitbox[1]];
+    var hpos2 = [ent.pos.x + ent.hitbox[0], ent.pos.y + ent.hitbox[1]];
 
     //if the hitboxes actually overlap
     if (!(hpos1[0] > hpos2[0] + ent.hitbox[2] || (hpos1[0] + this.hitbox[2] < hpos2[0]))) {
       if (!(hpos1[1] > hpos2[1] + ent.hitbox[3] || (hpos1[1] + this.hitbox[3] < hpos2[1]))) {
         if (ent instanceof Mario.Player) {
-          if (ent.vel[1] > 0) {
+          if (ent.vel.y > 0) {
             player.bounce = true;
           }
           if (this.shell) {
             sounds.kick.play();
-            if (this.vel[0] === 0) {
+            if (this.vel.x === 0) {
               if (ent.left) { //I'm pretty sure this isn't the real logic.
-                this.vel[0] = -4;
+                this.vel.x = -4;
               } else {
-                this.vel[0] = 4;
+                this.vel.x = 4;
               }
             } else {
               if (ent.bounce) {
-                this.vel[0] = 0;
+                this.vel.x = 0;
               } else ent.damage();
             }
-          } else if (ent.vel[1] > 0) { //then we get BOPPED.
+          } else if (ent.vel.y > 0) { //then we get BOPPED.
             this.stomp();
           } else { //or the player gets hit
             ent.damage();
@@ -187,18 +187,18 @@ class Koopa extends Entity {
     player.bounce = true;
     if (this.para) {
       this.para = false;
-      this.sprite.pos[0] -= 32;
+      this.sprite.pos.x -= 32;
     } else {
       sounds.stomp.play();
       this.shell = 360;
-      this.sprite.pos[0] += 64;
-      this.sprite.pos[1] += 16;
+      this.sprite.pos.x += 64;
+      this.sprite.pos.y += 16;
       this.sprite.size = [16, 16];
       this.hitbox = [2, 0, 12, 16];
       this.sprite.speed = 0;
       this.frames = [0, 1];
-      this.vel = [0, 0];
-      this.pos[1] += 16;
+      this.vel = new Point(0, 0);
+      this.pos.y += 16;
     }
 
   };
@@ -207,12 +207,12 @@ class Koopa extends Entity {
     sounds.kick.play();
     if (this.flipping) return;
     this.flipping = true;
-    this.sprite.pos = [160, 0];
+    this.sprite.pos = new Point(160, 0);
     this.sprite.size = [16, 16];
     this.hitbox = [2, 0, 12, 16];
     this.sprite.speed = 0;
-    this.vel[0] = 0;
-    this.vel[1] = -2.5;
+    this.vel.x = 0;
+    this.vel.y = -2.5;
   };
 }
 Mario.Koopa = Koopa;

@@ -1,10 +1,15 @@
 var requestAnimFrame = (function () {
+
   return window.requestAnimationFrame ||
+    //@ts-ignore
     window["webkitRequestAnimationFrame"] ||
+    //@ts-ignore
     window["mozRequestAnimationFrame"] ||
+    //@ts-ignore
     window["oRequestAnimationFrame"] ||
+    //@ts-ignore
     window["msRequestAnimationFrame"] ||
-    function (callback) {
+    function (callback: TimerHandler) {
       window.setTimeout(callback, 1000 / 60);
     };
 })();
@@ -14,7 +19,7 @@ var canvas = document.createElement("canvas");
 var ctx = canvas.getContext('2d');
 var updateables: ({ update: (dt: number, gameTime: number) => void })[] = [];
 var fireballs: Fireball[] = [];
-var player = new Mario.Player([0, 0]);
+var player = new Mario.Player(new Point(0, 0));
 
 //we might have to get the size and calculate the scaling
 //but this method should let us make it however big.
@@ -49,7 +54,7 @@ var sounds: Sounds;
 var music: Music;
 
 //initialize
-var lastTime;
+var lastTime: number;
 function init() {
   music = {
     overworld: new Audio('sounds/aboveground_bgm.ogg'),
@@ -94,7 +99,7 @@ function main() {
  * Game Loop Update
  * @param {number} dt 
  */
-function update(dt) {
+function update(dt: number) {
   gameTime += dt;
 
   // Update Input
@@ -112,7 +117,7 @@ function update(dt) {
  * @param {number} dt 
  * @returns 
  */
-function handleInput(dt) {
+function handleInput(dt: number) {
   // Poll input.  Used for gamepad events
   input.update();
 
@@ -159,7 +164,7 @@ function handleInput(dt) {
  * @param {number} gameTime 
  * @returns 
  */
-function updateEntities(dt, gameTime) {
+function updateEntities(dt: number, gameTime: number) {
   player.update(dt, vX);
   updateables.forEach(function (ent) {
     ent.update(dt, gameTime);
@@ -167,10 +172,10 @@ function updateEntities(dt, gameTime) {
 
   //This should stop the jump when he switches sides on the flag.
   if (player.exiting) {
-    if (player.pos[0] > vX + 96)
-      vX = player.pos[0] - 96
-  } else if (level.scrolling && player.pos[0] > vX + 80) {
-    vX = player.pos[0] - 80;
+    if (player.pos.x > vX + 96)
+      vX = player.pos.x - 96
+  } else if (level.scrolling && player.pos.x > vX + 80) {
+    vX = player.pos.x - 80;
   }
 
   if (player.powering.length !== 0 || player.dying) { return; }
@@ -265,6 +270,6 @@ function render() {
   });
 }
 
-function renderEntity(entity) {
+function renderEntity(entity: Renderable) {
   entity.render(ctx, vX, vY);
 }

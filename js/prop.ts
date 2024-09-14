@@ -2,13 +2,13 @@
 class Prop {
   pos: Point;
   sprite: Sprite;
-  constructor(pos, sprite) {
+  constructor(pos: Point, sprite: Sprite) {
     this.pos = pos;
     this.sprite = sprite;
   }
   //but we will be using the same Render, more or less.
   render(ctx: CanvasRenderingContext2D, vX: number, vY: number) {
-    this.sprite.render(ctx, this.pos[0], this.pos[1], vX, vY);
+    this.sprite.render(ctx, this.pos.x, this.pos.y, vX, vY);
   }
 }
 

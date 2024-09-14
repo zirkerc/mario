@@ -3,7 +3,7 @@ class Goomba extends Entity {
   dying: number;
   idx: number;
   flipping: boolean;
-  constructor(pos, sprite) {
+  constructor(pos: Point, sprite: Sprite) {
     super({
       pos: pos,
       sprite: sprite,
@@ -11,17 +11,17 @@ class Goomba extends Entity {
     });
 
     this.dying = 0;
-    this.vel[0] = -0.5;
+    this.vel.x = -0.5;
     this.idx = level.enemies.length;
   }
   render(ctx: CanvasRenderingContext2D, vX: number, vY: number) {
-    this.sprite.render(ctx, this.pos[0], this.pos[1], vX, vY);
+    this.sprite.render(ctx, this.pos.x, this.pos.y, vX, vY);
   };
 
-  update(dt, vX) {
-    if (this.pos[0] - vX > 336) { //if we're too far away, do nothing.
+  update(dt: number, vX: number) {
+    if (this.pos.x - vX > 336) { //if we're too far away, do nothing.
       return;
-    } else if (this.pos[0] - vX < -32) {
+    } else if (this.pos.x - vX < -32) {
       delete level.enemies[this.idx];
     }
 
@@ -31,15 +31,15 @@ class Goomba extends Entity {
         delete level.enemies[this.idx];
       }
     }
-    this.acc[1] = 0.2;
-    this.vel[1] += this.acc[1];
-    this.pos[0] += this.vel[0];
-    this.pos[1] += this.vel[1];
+    this.acc.y = 0.2;
+    this.vel.y += this.acc.y;
+    this.pos.x += this.vel.x;
+    this.pos.y += this.vel.y;
     this.sprite.update(dt);
   };
 
   collideWall() {
-    this.vel[0] = -this.vel[0];
+    this.vel.x = -this.vel.x;
   };
 
   checkCollisions() {
@@ -47,11 +47,11 @@ class Goomba extends Entity {
       return;
     }
 
-    var h = this.pos[1] % 16 === 0 ? 1 : 2;
-    var w = this.pos[0] % 16 === 0 ? 1 : 2;
+    var h = this.pos.y % 16 === 0 ? 1 : 2;
+    var w = this.pos.x % 16 === 0 ? 1 : 2;
 
-    var baseX = Math.floor(this.pos[0] / 16);
-    var baseY = Math.floor(this.pos[1] / 16);
+    var baseX = Math.floor(this.pos.x / 16);
+    var baseY = Math.floor(this.pos.y / 16);
 
     if (baseY + h > 15) {
       delete level.enemies[this.idx];
@@ -72,7 +72,7 @@ class Goomba extends Entity {
     level.enemies.forEach(function (enemy) {
       if (enemy === that) { //don't check collisions with ourselves.
         return;
-      } else if (enemy.pos[0] - vX > 336) { //stop checking once we get to far away dudes.
+      } else if (enemy.pos.x - vX > 336) { //stop checking once we get to far away dudes.
         return;
       } else {
         that.isCollideWith(enemy);
@@ -87,14 +87,14 @@ class Goomba extends Entity {
     }
 
     //the first two elements of the hitbox array are an offset, so let's do this now.
-    var hpos1 = [this.pos[0] + this.hitbox[0], this.pos[1] + this.hitbox[1]];
-    var hpos2 = [ent.pos[0] + ent.hitbox[0], ent.pos[1] + ent.hitbox[1]];
+    var hpos1 = [this.pos.x + this.hitbox[0], this.pos.y + this.hitbox[1]];
+    var hpos2 = [ent.pos.x + ent.hitbox[0], ent.pos.y + ent.hitbox[1]];
 
     //if the hitboxes actually overlap
     if (!(hpos1[0] > hpos2[0] + ent.hitbox[2] || (hpos1[0] + this.hitbox[2] < hpos2[0]))) {
       if (!(hpos1[1] > hpos2[1] + ent.hitbox[3] || (hpos1[1] + this.hitbox[3] < hpos2[1]))) {
         if (ent instanceof Mario.Player) { //if we hit the player
-          if (ent.vel[1] > 0) { //then the goomba dies
+          if (ent.vel.y > 0) { //then the goomba dies
             this.stomp();
           } else if (ent.starTime) {
             this.bump();
@@ -111,9 +111,9 @@ class Goomba extends Entity {
   stomp() {
     sounds.stomp.play();
     player.bounce = true;
-    this.sprite.pos[0] = 32;
+    this.sprite.pos.x = 32;
     this.sprite.speed = 0;
-    this.vel[0] = 0;
+    this.vel.x = 0;
     this.dying = 10;
   };
 
@@ -121,9 +121,9 @@ class Goomba extends Entity {
     sounds.kick.play();
     this.sprite.img = 'sprites/enemyr.png';
     this.flipping = true;
-    this.pos[1] -= 1;
-    this.vel[0] = 0;
-    this.vel[1] = -2.5;
+    this.pos.y -= 1;
+    this.vel.x = 0;
+    this.vel.y = -2.5;
   };
 }
 Mario.Goomba = Goomba;
