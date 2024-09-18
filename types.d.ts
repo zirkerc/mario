@@ -3,6 +3,8 @@ declare let resources: Resources;
 declare let input: Input;
 
 declare let Mario: {
+	levels: Record<string, () => void>;
+	loadLevel(level: string): void;
 	oneonetunnel: () => void;
 	Bcoin: typeof Bcoin;
 	Star: typeof Star;

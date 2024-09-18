@@ -128,7 +128,7 @@ var oneone = Mario.oneone = function () {
   level.putPipe(28, 13, 2);
   level.putPipe(38, 13, 3);
   level.putPipe(46, 13, 4);
-  level.putRealPipe(57, 9, 4, "DOWN", Mario.oneonetunnel);
+  level.putRealPipe(57, 9, 4, "DOWN", Mario.levels["1-1.tunnel"]);//.oneonetunnel);
   level.putBrick(77, 9, null);
   level.putQBlock(78, 9, new Mario.Mushroom(new Point(1248, 144)));
   level.putBrick(79, 9, null);

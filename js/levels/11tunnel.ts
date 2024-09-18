@@ -53,7 +53,8 @@ var oneonetunnel = Mario.oneonetunnel = function () {
 
   //level.putLeftPipe(13,11);
   level.putRealPipe(13, 11, 3, "RIGHT", function () {
-    Mario.oneone.call(undefined);
+    //Mario.oneone.call(undefined);
+    Mario.loadLevel("1-1");
     player.pos = new Point(2616, 177)
     player.pipe("UP", function () { ; });
   });

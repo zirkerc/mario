@@ -22,6 +22,7 @@
         }
         else {
             var img = new Image();
+
             img.onload = function () {
                 resourceCache[url] = img;
 
@@ -30,8 +31,30 @@
                 }
             };
             resourceCache[url] = false;
+            // toDataUrl(url, (data: any) => {
+            //     img.src = data;
+            // })
             img.src = url;
+            //img.crossOrigin = "Anonymous"
+            //img.setAttribute('crossOrigin', '');
+
         }
+    }
+
+    // helper to transform to base64
+    // see other question for more help
+    function toDataUrl(url: string, callback: (data: string | ArrayBuffer) => void): void {
+        var xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        xhr.onload = function () {
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                callback(reader.result);
+            };
+            reader.readAsDataURL(xhr.response);
+        };
+        xhr.open('GET', url);
+        xhr.send();
     }
 
     function get(url: string) {

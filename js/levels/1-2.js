@@ -1,10 +1,10 @@
-var oneone = Mario.oneone = function () {
+Mario.levels["1-2"] = function () {
     //The things that need to be passed in are basically just dependent on what
     //tileset we're in, so it makes more sense to just make one variable for that, so
     //TODO: put as much of this in the Level object definition as possible.
     let levelOptions = {
         playerPos: new Point(56, 192),
-        loader: Mario.oneone,
+        loader: Mario.levels["1-2"],
         background: "#7974FF",
         scrolling: true,
         invincibility: [144, 192, 240],
@@ -185,23 +185,23 @@ var oneone = Mario.oneone = function () {
     level.putWall(189, 13, 8);
     level.putFlagpole(198);
     //and enemies
-    level.putGoomba(22, 12);
-    level.putGoomba(40, 12);
-    level.putGoomba(50, 12);
-    level.putGoomba(51, 12);
-    level.putGoomba(82, 4);
-    level.putGoomba(84, 4);
-    level.putGoomba(100, 12);
-    level.putGoomba(102, 12);
-    level.putGoomba(114, 12);
-    level.putGoomba(115, 12);
-    level.putGoomba(122, 12);
-    level.putGoomba(123, 12);
-    level.putGoomba(125, 12);
-    level.putGoomba(126, 12);
-    level.putGoomba(170, 12);
-    level.putGoomba(172, 12);
-    level.putKoopa(35, 11);
+    // level.putGoomba(22, 12);
+    // level.putGoomba(40, 12);
+    // level.putGoomba(50, 12);
+    // level.putGoomba(51, 12);
+    // level.putGoomba(82, 4);
+    // level.putGoomba(84, 4);
+    // level.putGoomba(100, 12);
+    // level.putGoomba(102, 12);
+    // level.putGoomba(114, 12);
+    // level.putGoomba(115, 12);
+    // level.putGoomba(122, 12);
+    // level.putGoomba(123, 12);
+    // level.putGoomba(125, 12);
+    // level.putGoomba(126, 12);
+    // level.putGoomba(170, 12);
+    // level.putGoomba(172, 12);
+    // level.putKoopa(35, 11);
     music.underground.pause();
     // music.overworld.currentTime = 0;
     music.overworld.play();

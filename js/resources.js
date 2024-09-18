@@ -27,8 +27,28 @@
                 }
             };
             resourceCache[url] = false;
+            // toDataUrl(url, (data: any) => {
+            //     img.src = data;
+            // })
             img.src = url;
+            //img.crossOrigin = "Anonymous"
+            //img.setAttribute('crossOrigin', '');
         }
+    }
+    // helper to transform to base64
+    // see other question for more help
+    function toDataUrl(url, callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        xhr.onload = function () {
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                callback(reader.result);
+            };
+            reader.readAsDataURL(xhr.response);
+        };
+        xhr.open('GET', url);
+        xhr.send();
     }
     function get(url) {
         return resourceCache[url];

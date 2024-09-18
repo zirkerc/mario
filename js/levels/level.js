@@ -102,8 +102,8 @@ class Level {
         this.enemies.push(new Mario.Goomba(new Point(16 * x, 16 * y), this.goombaSprite()));
     }
     ;
-    putKoopa(x, y) {
-        this.enemies.push(new Mario.Koopa(new Point(16 * x, 16 * y), this.koopaSprite(), false));
+    putKoopa(x, y, para = false) {
+        this.enemies.push(new Mario.Koopa(new Point(16 * x, 16 * y), this.koopaSprite(), para));
     }
     ;
     putWall(x, y, height) {
