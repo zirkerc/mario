@@ -84,23 +84,7 @@ function init() {
   let cW = canvas.width;
   let cH = canvas.height;
 
-  // function getImageData(resource: string) {
-  //   let png = resources.get(resource);
-  //   canvas.width = png.width;
-  //   canvas.height = png.height;
-  //   ctx.scale(1, 1);
 
-  //   ctx.drawImage(png, 0, 0);
-  //   let data = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-  //   canvas.width = cW;
-  //   canvas.height = cH;
-  //   ctx.scale(3, 3);
-  //   return data;
-  // }
-
-  //let pixels = getImageData("sprites/tiles.png");
-  //console.log(pixels);
   Mario.loadLevel = (level) => {
     Mario.levels[level]();
   };
@@ -227,6 +211,7 @@ function updateEntities(dt: number, gameTime: number) {
 //scan for collisions
 function checkCollisions() {
   if (player.powering.length !== 0 || player.dying) { return; }
+
   player.checkCollisions();
 
   //Apparently for each will just skip indices where things were deleted.

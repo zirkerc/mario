@@ -21,7 +21,7 @@ class Goomba extends Entity {
   update(dt: number, vX: number) {
     if (this.pos.x - vX > 336) { //if we're too far away, do nothing.
       return;
-    } else if (this.pos.x - vX < -32) {
+    } else if (this.pos.x - vX < -320) {
       delete level.enemies[this.idx];
     }
 

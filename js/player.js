@@ -58,7 +58,7 @@ class Player extends Entity {
         if (this.fireballs >= 2)
             return; //Projectile limit!
         this.fireballs += 1;
-        var fb = new Mario.Fireball(new Point(this.pos.x + 8, this.pos.y)); //I hate you, Javascript.
+        var fb = new Mario.Fireball(new Point(this.pos.x + 8, this.pos.y));
         fb.spawn(this.left);
         this.shooting = 2;
     }
@@ -383,6 +383,33 @@ class Player extends Entity {
         else {
             this.powering = [];
             delete level.items[idx];
+            //no animation, but we play the sound and you get 5000 points.
+        }
+    }
+    ;
+    setPower(power) {
+        this.powering = [];
+        this.power = power;
+        if (this.power === 0) {
+            this.sprite.pos.x = 80;
+            var newy = this.sprite.pos.y - 32;
+            this.powerSprites = [new Point(80, newy + 32), new Point(80, newy + 32), new Point(320, newy), new Point(80, newy), new Point(128, newy)];
+            this.powerSizes = [new Size(16, 16), new Size(16, 16), new Size(16, 32), new Size(16, 32), new Size(16, 32)];
+            this.shift = [0, 16, -16, 0, -16];
+            this.power = 1;
+            this.hitbox = new BoundBox(0, 0, 16, 32);
+        }
+        else if (this.power == 1) {
+            var curx = this.sprite.pos.x;
+            this.powerSprites = [new Point(curx, 96), new Point(curx, level.invincibility[0]),
+                new Point(curx, level.invincibility[1]), new Point(curx, level.invincibility[2]),
+                new Point(curx, 96)];
+            this.powerSizes = [new Size(16, 32), new Size(16, 32), new Size(16, 32), new Size(16, 32), new Size(16, 32)];
+            this.shift = [0, 0, 0, 0, 0];
+            this.power = 2;
+        }
+        else {
+            this.powering = [];
             //no animation, but we play the sound and you get 5000 points.
         }
     }

@@ -25,6 +25,7 @@ interface GamepadAPI {
     function setKey(event: KeyboardEvent, status: boolean) {
         var code = event.keyCode;
         var key;
+        console.log(code, event.key);
         switch (code) {
             case 65: // A
             case 37: // LeftArrow

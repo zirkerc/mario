@@ -4,6 +4,7 @@
     function setKey(event, status) {
         var code = event.keyCode;
         var key;
+        console.log(code, event.key);
         switch (code) {
             case 65: // A
             case 37: // LeftArrow

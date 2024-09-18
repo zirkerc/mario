@@ -70,20 +70,6 @@ function init() {
     Mario.levels["1-1.tunnel"] = oneonetunnel;
     let cW = canvas.width;
     let cH = canvas.height;
-    // function getImageData(resource: string) {
-    //   let png = resources.get(resource);
-    //   canvas.width = png.width;
-    //   canvas.height = png.height;
-    //   ctx.scale(1, 1);
-    //   ctx.drawImage(png, 0, 0);
-    //   let data = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    //   canvas.width = cW;
-    //   canvas.height = cH;
-    //   ctx.scale(3, 3);
-    //   return data;
-    // }
-    //let pixels = getImageData("sprites/tiles.png");
-    //console.log(pixels);
     Mario.loadLevel = (level) => {
         Mario.levels[level]();
     };

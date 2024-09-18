@@ -13,13 +13,8 @@ class Fireball extends Entity {
   spawn(left: boolean) {
     sounds.fireball.currentTime = 0;
     sounds.fireball.play();
-    if (fireballs[0]) {
-      this.idx = 1;
-      fireballs[1] = this;
-    } else {
-      this.idx = 0;
-      fireballs[0] = this;
-    }
+    this.idx = fireballs.length;
+    fireballs.push(this);
     this.vel.x = (left ? -5 : 5);
     this.standing = false;
     this.vel.y = 0;
@@ -37,7 +32,7 @@ class Fireball extends Entity {
       this.sprite.speed = 8;
       this.hit += 1;
       return;
-    } else if (this.hit == 5) {
+    } else if (this.hit >= 5) {
       delete fireballs[this.idx];
       player.fireballs -= 1;
       return;
